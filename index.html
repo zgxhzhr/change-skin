@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="换肤商城 — 服装鞋帽数码一站式浏览，支持一键换肤">
+    <title>换肤商城 MODERN · 主题演示</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+
+    <div class="bg-decor">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="blob blob-3"></span>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <header class="header">
+            <div class="brand">
+                <img class="logo" src="img/purple.webp" alt="商城 Logo" width="48" height="48" loading="eager">
+                <span class="brand-name">Shop<span class="brand-accent">MOD</span></span>
+            </div>
+            <nav aria-label="主题切换">
+                <ul class="theme-tabs" role="tablist">
+                    <li class="theme-tab" data-theme="red"    data-logo="red.webp"    title="红色主题" role="tab" aria-selected="false"><span class="swatch red" aria-hidden="true"></span><span class="label">炽热红</span></li>
+                    <li class="theme-tab" data-theme="green"  data-logo="green.webp"  title="绿色主题" role="tab" aria-selected="false"><span class="swatch green" aria-hidden="true"></span><span class="label">森绿</span></li>
+                    <li class="theme-tab" data-theme="blue"   data-logo="blue.webp"   title="蓝色主题" role="tab" aria-selected="false"><span class="swatch blue" aria-hidden="true"></span><span class="label">深空蓝</span></li>
+                    <li class="theme-tab" data-theme="orange" data-logo="orange.webp" title="橙色主题" role="tab" aria-selected="false"><span class="swatch orange" aria-hidden="true"></span><span class="label">活力橙</span></li>
+                    <li class="theme-tab active" data-theme="purple" data-logo="purple.webp" title="紫色主题" role="tab" aria-selected="true"><span class="swatch purple" aria-hidden="true"></span><span class="label">紫晶</span></li>
+                </ul>
+            </nav>
+        </header>
+
+        <nav class="nav" aria-label="主导航">
+            <button class="hamburger" aria-label="打开菜单" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">👕 服装</a>
+                    <ul class="submenu">
+                        <li class="has-sub"><a href="#">男装</a>
+                            <ul class="submenu submenu-level2">
+                                <li><a href="#">外套</a></li>
+                                <li><a href="#">T恤</a></li>
+                                <li><a href="#">裤子</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-sub"><a href="#">女装</a>
+                            <ul class="submenu submenu-level2">
+                                <li><a href="#">连衣裙</a></li>
+                                <li><a href="#">上衣</a></li>
+                                <li><a href="#">裙子</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">童装</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">👟 鞋帽</a>
+                    <ul class="submenu">
+                        <li class="has-sub"><a href="#">男鞋</a>
+                            <ul class="submenu submenu-level2">
+                                <li><a href="#">运动鞋</a></li>
+                                <li><a href="#">皮鞋</a></li>
+                                <li><a href="#">休闲鞋</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">女鞋</a></li>
+                        <li><a href="#">帽子</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">💻 数码</a>
+                    <ul class="submenu">
+                        <li><a href="#">手机</a></li>
+                        <li class="has-sub"><a href="#">电脑</a>
+                            <ul class="submenu submenu-level2">
+                                <li><a href="#">笔记本</a></li>
+                                <li><a href="#">台式机</a></li>
+                                <li><a href="#">平板电脑</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">配件</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link" id="aboutLink">ℹ️ 关于我们</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="hero">
+                <div class="hero-inner">
+                    <p class="hero-tag">NEW · 2026 秋季焕新</p>
+                    <h1 class="hero-title">探索 <span class="hero-highlight">无限可能</span> 的购物之旅</h1>
+                    <p class="hero-desc">三级菜单导航 · 一键换肤 · 响应式适配，现代化前端工程完整演示。</p>
+                    <button id="heroBuyBtn" class="hero-cta">🔥 立即抢购</button>
+                </div>
+                <div class="hero-orb" aria-hidden="true"></div>
+            </section>
+
+            <!-- 图片走马灯（水平无缝滚动 · 支持换肤变量） -->
+            <section class="carousel-section" aria-label="精选推荐">
+                <div class="carousel-header">
+                    <h2 class="carousel-title">🔥 精选推荐</h2>
+                    <div class="carousel-hint">悬停暂停 · 无缝循环</div>
+                </div>
+                <div class="carousel-window" id="carouselWindow">
+                    <ul id="carouselList">
+                        <li><img src="img/red.webp" alt="炽热红主题"></li>
+                        <li><img src="img/green.webp" alt="森绿主题"></li>
+                        <li><img src="img/blue.webp" alt="深空蓝主题"></li>
+                        <li><img src="img/orange.webp" alt="活力橙主题"></li>
+                        <li><img src="img/purple.webp" alt="紫晶主题"></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="filter-bar" aria-label="商品筛选">
+                <ul class="content-tabs" role="tablist">
+                    <li class="content-tab active" data-tab="all"      role="tab" aria-selected="true">✨ 全部商品</li>
+                    <li class="content-tab" data-tab="newest"  role="tab" aria-selected="false">🆕 最新上架</li>
+                    <li class="content-tab" data-tab="hot"     role="tab" aria-selected="false">🔥 热销排行</li>
+                    <li class="content-tab" data-tab="sale"     role="tab" aria-selected="false">💰 限时特惠</li>
+                </ul>
+            </section>
+
+            <ul class="content-panels">
+                <li class="content-panel active" data-tab="all">
+                    <h2>全部商品</h2>
+                    <ul class="product-list">
+                        <li class="product-item" data-cat="clothes">
+                            <span class="product-badge">热销</span>
+                            <figure class="product-img">👔</figure>
+                            <h3 class="product-name">商务休闲西装</h3>
+                            <p class="product-meta">月销 2.4k · 好评 98%</p>
+                            <p class="product-price"><data value="299">¥299</data></p>
+                        </li>
+                        <li class="product-item" data-cat="clothes">
+                            <figure class="product-img">👗</figure>
+                            <h3 class="product-name">夏季连衣裙</h3>
+                            <p class="product-meta">月销 1.8k · 好评 96%</p>
+                            <p class="product-price"><data value="188">¥188</data></p>
+                        </li>
+                        <li class="product-item" data-cat="shoes">
+                            <span class="product-badge hot">热销</span>
+                            <figure class="product-img">👟</figure>
+                            <h3 class="product-name">男士运动鞋</h3>
+                            <p class="product-meta">月销 5.6k · 好评 99%</p>
+                            <p class="product-price"><data value="459">¥459</data></p>
+                        </li>
+                        <li class="product-item" data-cat="digital">
+                            <span class="product-badge new">NEW</span>
+                            <figure class="product-img">💻</figure>
+                            <h3 class="product-name">轻薄笔记本</h3>
+                            <p class="product-meta">月销 890 · 好评 97%</p>
+                            <p class="product-price"><data value="5999">¥5999</data></p>
+                        </li>
+                        <li class="product-item" data-cat="clothes">
+                            <figure class="product-img">🧥</figure>
+                            <h3 class="product-name">冬季羽绒服</h3>
+                            <p class="product-meta">月销 1.2k · 好评 95%</p>
+                            <p class="product-price"><data value="599">¥599</data></p>
+                        </li>
+                        <li class="product-item" data-cat="digital">
+                            <figure class="product-img">📱</figure>
+                            <h3 class="product-name">智能手机</h3>
+                            <p class="product-meta">月销 3.1k · 好评 98%</p>
+                            <p class="product-price"><data value="3299">¥3299</data></p>
+                        </li>
+                        <li class="product-item" data-cat="digital">
+                            <figure class="product-img">⌨️</figure>
+                            <h3 class="product-name">机械键盘</h3>
+                            <p class="product-meta">月销 780 · 好评 94%</p>
+                            <p class="product-price"><data value="499">¥499</data></p>
+                        </li>
+                        <li class="product-item" data-cat="shoes">
+                            <figure class="product-img">👠</figure>
+                            <h3 class="product-name">女士高跟鞋</h3>
+                            <p class="product-meta">月销 1.1k · 好评 93%</p>
+                            <p class="product-price"><data value="399">¥399</data></p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="content-panel" data-tab="newest">
+                    <h2>🆕 最新上架</h2>
+                    <ul class="product-list">
+                        <li class="product-item" data-cat="digital">
+                            <span class="product-badge new">NEW</span>
+                            <figure class="product-img">💻</figure>
+                            <h3 class="product-name">轻薄笔记本</h3>
+                            <p class="product-meta">上架 3 天</p>
+                            <p class="product-price"><data value="5999">¥5999</data></p>
+                        </li>
+                        <li class="product-item" data-cat="shoes">
+                            <span class="product-badge new">NEW</span>
+                            <figure class="product-img">👠</figure>
+                            <h3 class="product-name">女士高跟鞋</h3>
+                            <p class="product-meta">上架 5 天</p>
+                            <p class="product-price"><data value="399">¥399</data></p>
+                        </li>
+                        <li class="product-item" data-cat="clothes">
+                            <span class="product-badge new">NEW</span>
+                            <figure class="product-img">🧥</figure>
+                            <h3 class="product-name">冬季羽绒服</h3>
+                            <p class="product-meta">上架 1 周</p>
+                            <p class="product-price"><data value="599">¥599</data></p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="content-panel" data-tab="hot">
+                    <h2>🔥 热销排行</h2>
+                    <ul class="product-list">
+                        <li class="product-item rank-1" data-cat="shoes">
+                            <span class="rank-badge">🥇</span>
+                            <figure class="product-img">👟</figure>
+                            <h3 class="product-name">男士运动鞋</h3>
+                            <p class="product-meta">月销 5.6k</p>
+                            <p class="product-price"><data value="459">¥459</data></p>
+                        </li>
+                        <li class="product-item rank-2" data-cat="digital">
+                            <span class="rank-badge">🥈</span>
+                            <figure class="product-img">📱</figure>
+                            <h3 class="product-name">智能手机</h3>
+                            <p class="product-meta">月销 3.1k</p>
+                            <p class="product-price"><data value="3299">¥3299</data></p>
+                        </li>
+                        <li class="product-item rank-3" data-cat="clothes">
+                            <span class="rank-badge">🥉</span>
+                            <figure class="product-img">👔</figure>
+                            <h3 class="product-name">商务休闲西装</h3>
+                            <p class="product-meta">月销 2.4k</p>
+                            <p class="product-price"><data value="299">¥299</data></p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="content-panel" data-tab="sale">
+                    <h2>💰 限时特惠</h2>
+                    <ul class="product-list">
+                        <li class="product-item on-sale" data-cat="clothes">
+                            <span class="product-badge sale">−40%</span>
+                            <figure class="product-img">👗</figure>
+                            <h3 class="product-name">夏季连衣裙</h3>
+                            <p class="product-meta">原价 ¥318</p>
+                            <p class="product-price"><data value="188">¥188</data></p>
+                        </li>
+                        <li class="product-item on-sale" data-cat="shoes">
+                            <span class="product-badge sale">−50%</span>
+                            <figure class="product-img">🎩</figure>
+                            <h3 class="product-name">时尚礼帽</h3>
+                            <p class="product-meta">原价 ¥258</p>
+                            <p class="product-price"><data value="129">¥129</data></p>
+                        </li>
+                        <li class="product-item on-sale" data-cat="clothes">
+                            <span class="product-badge sale">−32%</span>
+                            <figure class="product-img">👕</figure>
+                            <h3 class="product-name">纯棉 T 恤</h3>
+                            <p class="product-meta">原价 ¥88</p>
+                            <p class="product-price"><data value="59">¥59</data></p>
+                        </li>
+                        <li class="product-item on-sale" data-cat="digital">
+                            <span class="product-badge sale">−38%</span>
+                            <figure class="product-img">🎧</figure>
+                            <h3 class="product-name">无线耳机</h3>
+                            <p class="product-meta">原价 ¥1288</p>
+                            <p class="product-price"><data value="799">¥799</data></p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <small>© 2022 swj.cvit.edu.cn · All Rights Reserved</small>
+                <span class="footer-divider">·</span>
+                <small>💎 ShopMOD · Modern E-commerce Demo</small>
+            </div>
+        </footer>
+    </div>
+
+    <button id="debugToggle" title="切换竖屏调试" aria-label="切换竖屏">📱</button>
+
+    <!-- 1. 主题切换确认 -->
+    <div id="modal-mask-theme" class="modal-mask">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 class="modal-title">主题切换</h3>
+                <button class="close-btn" data-fixed-text="×">×</button>
+            </div>
+            <div class="modal-content">
+                <p>即将切换到 <strong id="themeNameLabel"></strong> 主题，确定继续吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel">取消</button>
+                <button class="btn-confirm">确认切换</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 走马灯大图预览 -->
+    <div id="modal-mask-preview" class="modal-mask">
+        <div class="modal large">
+            <div class="modal-head">
+                <h3 class="modal-title">图片预览</h3>
+                <button class="close-btn" data-fixed-text="×">×</button>
+            </div>
+            <div class="modal-content">
+                <img id="previewImg" class="preview-img" alt="预览">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-confirm">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 联系我们表单 -->
+    <div id="modal-mask-contact" class="modal-mask">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 class="modal-title">联系我们</h3>
+                <button class="close-btn" data-fixed-text="×">×</button>
+            </div>
+            <div class="modal-content">
+                <label>姓名
+                    <input type="text" id="contactName" placeholder="请输入您的姓名" required>
+                </label>
+                <label>邮箱
+                    <input type="email" id="contactEmail" placeholder="example@email.com" required>
+                </label>
+                <label>留言
+                    <textarea id="contactMsg" placeholder="请描述您的需求或问题..." required></textarea>
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel">取消</button>
+                <button class="btn-confirm">提交留言</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Hero 立即抢购结算 -->
+    <div id="modal-mask-checkout" class="modal-mask">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 class="modal-title">立即抢购 · 结算</h3>
+                <button class="close-btn" data-fixed-text="×">×</button>
+            </div>
+            <div class="modal-content">
+                <label>收货地址
+                    <input type="text" id="ckAddr" placeholder="请填写完整收货地址" required>
+                </label>
+                <label>联系电话
+                    <input type="tel" id="ckPhone" placeholder="请输入手机号码" required>
+                </label>
+                <label>购买数量
+                    <input type="number" id="ckQty" value="1" min="1" max="99">
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel">取消</button>
+                <button class="btn-confirm">提交订单</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/mulModal.base.js"></script>
+    <script src="js/main.js" defer></script>
+
+</body>
+</html>
