@@ -283,6 +283,13 @@ body {
     gap: 5px;
 }
 
+.hamburger.active {
+    background: var(--theme-color-dark);
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
 .hamburger span {
     display: block;
     width: 26px;
@@ -349,7 +356,7 @@ body {
 
 .submenu {
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;
     left: 0;
     list-style: none;
     min-width: 190px;
@@ -361,9 +368,20 @@ body {
     transform: translateY(-12px) scale(0.96);
     transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-spring), visibility 0.3s;
     z-index: 100;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid var(--border);
     padding: 6px;
+    padding-top: 10px;
+}
+
+/* 透明桥接区：跨越导航项与子菜单之间的空隙，确保鼠标移动时 hover 不断开 */
+.submenu::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
 }
 
 .submenu::before {
@@ -887,6 +905,7 @@ body.mobile-view .nav-menu .nav-item:last-child {
 }
 
 body.mobile-view .nav-menu .submenu {
+    display: none;
     position: static;
     opacity: 1;
     visibility: visible;
@@ -898,6 +917,10 @@ body.mobile-view .nav-menu .submenu {
     border: none;
     padding: 0;
     margin: 0 -16px;
+}
+
+body.mobile-view .nav-menu .nav-item.expanded > .submenu {
+    display: block;
 }
 
 body.mobile-view .nav-menu .submenu::before {
@@ -921,10 +944,15 @@ body.mobile-view .nav-menu .submenu li a:hover {
 }
 
 body.mobile-view .nav-menu .submenu .submenu-level2 {
+    display: none;
     position: static;
     transform: none;
     background: rgba(0, 0, 0, 0.35);
     margin: 0 -16px;
+}
+
+body.mobile-view .nav-menu .has-sub.expanded > .submenu-level2 {
+    display: block;
 }
 
 body.mobile-view .nav-menu .submenu .submenu-level2::before {
@@ -1063,6 +1091,7 @@ body.mobile-view .product-price {
     }
 
     .nav-menu .submenu {
+        display: none;
         position: static;
         opacity: 1;
         visibility: visible;
@@ -1074,6 +1103,10 @@ body.mobile-view .product-price {
         border: none;
         padding: 0;
         margin: 0 -16px;
+    }
+
+    .nav-menu .nav-item.expanded > .submenu {
+        display: block;
     }
 
     .nav-menu .submenu::before {
@@ -1097,10 +1130,15 @@ body.mobile-view .product-price {
     }
 
     .nav-menu .submenu .submenu-level2 {
+        display: none;
         position: static;
         transform: none;
         background: rgba(0, 0, 0, 0.35);
         margin: 0 -16px;
+    }
+
+    .nav-menu .has-sub.expanded > .submenu-level2 {
+        display: block;
     }
 
     .nav-menu .submenu .submenu-level2::before {

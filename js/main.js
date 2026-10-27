@@ -72,23 +72,29 @@ class Navigation {
 
     bindEvents() {
         this.navMenu?.addEventListener('click', (e) => {
-            const topLink = e.target.closest('.nav-link');
-            if (topLink) {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            const li = link.parentElement;
+            const hasSub = li?.querySelector(':scope > .submenu');
+
+            if (hasSub) {
+                // 父级菜单项：点击切换子菜单展开/收起
                 e.preventDefault();
-                this.setActive(topLink);
+                this.setActive(link);
+                li.classList.toggle('expanded');
                 return;
             }
 
-            const subLink = e.target.closest('.submenu a');
-            if (subLink) {
-                e.preventDefault();
-                this.setActive(subLink);
-            }
+            // 叶子链接：仅记录选中状态，不跳转
+            e.preventDefault();
+            this.setActive(link);
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.navMenu?.querySelectorAll('a.active').forEach(a => a.classList.remove('active'));
+                this.navMenu?.querySelectorAll('.expanded').forEach(el => el.classList.remove('expanded'));
             }
         });
     }
@@ -111,7 +117,10 @@ class Hamburger {
 
         this.navMenu?.addEventListener('click', (e) => {
             const link = e.target.closest('a');
-            if (link && this.nav?.classList.contains('open')) {
+            const li = link?.parentElement;
+            const hasSub = li?.querySelector(':scope > .submenu');
+            // 点击含子菜单的父级项时不关闭整个菜单（由 Navigation 负责展开/收起子菜单）
+            if (link && !hasSub && this.nav?.classList.contains('open')) {
                 this.close();
             }
         });
@@ -233,10 +242,7 @@ class ModalsInit {
                 const name = document.getElementById('contactName')?.value.trim();
                 const email = document.getElementById('contactEmail')?.value.trim();
                 const msg = document.getElementById('contactMsg')?.value.trim();
-                if (!name || !email || !msg) {
-                    alert('请填写完整信息');
-                    return;
-                }
+                if (!name || !email || !msg) { alert('请填写完整信息'); return; }
                 alert(`留言已提交！\n姓名：${name}\n邮箱：${email}`);
                 document.getElementById('contactName').value = '';
                 document.getElementById('contactEmail').value = '';
@@ -250,10 +256,7 @@ class ModalsInit {
                 const addr = document.getElementById('ckAddr')?.value.trim();
                 const phone = document.getElementById('ckPhone')?.value.trim();
                 const qty = document.getElementById('ckQty')?.value || '1';
-                if (!addr || !phone) {
-                    alert('请填写收货地址和联系电话');
-                    return;
-                }
+                if (!addr || !phone) { alert('请填写收货地址和联系电话'); return; }
                 alert(`订单提交成功！\n地址：${addr}\n电话：${phone}\n数量：${qty}`);
             },
             onCancel: () => alert('操作已取消')
@@ -265,20 +268,14 @@ class ModalsInit {
             e.preventDefault();
             this.contactModal.show();
         });
-
         document.getElementById('heroBuyBtn')?.addEventListener('click', () => {
             this.checkoutModal.show();
         });
-
-        const carouselList = document.getElementById('carouselList');
-        carouselList?.addEventListener('click', (e) => {
+        document.getElementById('carouselList')?.addEventListener('click', (e) => {
             const img = e.target.closest('img');
             if (!img) return;
             const previewImg = document.getElementById('previewImg');
-            if (previewImg) {
-                previewImg.src = img.src;
-                previewImg.alt = img.alt;
-            }
+            if (previewImg) { previewImg.src = img.src; previewImg.alt = img.alt; }
             this.previewModal.show();
         });
     }
