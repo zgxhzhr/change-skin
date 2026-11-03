@@ -11,10 +11,9 @@
 | 风格 | 视觉方向 |
 |---|---|
 | 漫画 | 网点纸底 + 粗黑描边 + 硬边投影 + 速度线 |
-| 和风 | 和纸纤维 + 青海波暗纹 + 朱红印章 + 细金线 |
-| 手帐 | 方格纸 + 纸胶带 + 荧光笔标记 + 纸片柔影 |
 | 杂志 | 12 列错位编排 + 超大衬线标题 + 打破规整网格 |
 | 扭蛋 | 塑料金属材质 + 机器按键 + 货架陈列 |
+| 书脊 | **结构型**：左侧 sticky 书脊跨满全页，banner 与 hero 同格叠放，商品为价目台账 |
 
 **5 色主题系统**：炽热红 / 森绿 / 深空蓝 / 活力橙 / 紫晶，切换时所有风格同步换色。
 
@@ -39,11 +38,11 @@
 便于分享和调试特定组合：
 
 ```
-?visual=manga|wafu|stationery|editorial|gacha   选择视觉风格
+?visual=manga|editorial|gacha|spine   选择视觉风格
 ?theme=red|green|blue|orange|purple             选择配色主题
 ```
 
-例如：`index.html?visual=gacha&theme=blue`
+例如：`index.html?visual=spine&theme=blue`
 
 ## 本地运行
 
@@ -67,7 +66,6 @@ python -m http.server 8777
 │   ├── modal.css              弹窗
 │   ├── banner.css             轮播
 │   ├── visual-manga.css       风格：漫画分镜
-│   ├── visual-wafu.css        风格：和风浮世绘
 │   ├── visual-stationery.css  风格：手帐文具
 │   ├── visual-editorial.css   风格：编辑排版
 │   ├── visual-gacha.css       风格：扭蛋商店
