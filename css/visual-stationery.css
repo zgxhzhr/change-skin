@@ -493,3 +493,27 @@ body.visual-stationery .banner-copy {
     left: 74px;
     max-width: 54%;
 }
+
+/* 换色面积强化 */
+body.visual-stationery .header::before {
+    background: repeating-linear-gradient(45deg,
+        var(--st-accent) 0 7px,
+        color-mix(in srgb, var(--st-accent) 42%, #ffffff) 7px 14px) !important;
+}
+body.visual-stationery .content-panel > h2 {
+    background: linear-gradient(180deg, transparent 58%, color-mix(in srgb, var(--st-accent) 32%, transparent) 58%);
+    padding-left: 6px;
+}
+body.visual-stationery .carousel-title {
+    background: linear-gradient(180deg, transparent 56%, color-mix(in srgb, var(--st-accent) 34%, transparent) 56%);
+}
+body.visual-stationery .footer { border-top: 3px dashed var(--st-accent) !important; }
+body.visual-stationery .carousel-section {
+    border-top: 2px solid var(--st-accent);
+    border-bottom: 2px solid var(--st-accent);
+}
+body.visual-stationery .product-item::before {
+    background: repeating-linear-gradient(45deg,
+        var(--st-accent) 0 6px,
+        color-mix(in srgb, var(--st-accent) 38%, #ffffff) 6px 12px) !important;
+}

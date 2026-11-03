@@ -482,3 +482,24 @@ body.visual-wafu .nav-link.active {
 body.visual-wafu .carousel-title::before {
     color: var(--wf-accent);
 }
+
+/* 换色面积强化 */
+body.visual-wafu .header { border-bottom: 3px solid var(--wf-accent) !important; }
+body.visual-wafu .footer { border-top: 6px solid var(--wf-accent) !important; }
+body.visual-wafu .content-panel > h2 {
+    border-left: 5px solid var(--wf-accent);
+    padding-left: 12px;
+}
+body.visual-wafu .carousel-title {
+    border-left: 5px solid var(--wf-accent);
+    padding-left: 10px;
+}
+body.visual-wafu .carousel-section {
+    border-top: 2px solid var(--wf-accent);
+    border-bottom: 2px solid var(--wf-accent);
+}
+body.visual-wafu .product-item::after {
+    background: linear-gradient(90deg, var(--wf-accent), color-mix(in srgb, var(--wf-accent) 20%, transparent));
+    height: 4px;
+}
+body.visual-wafu .hero-cta { letter-spacing: .18em; }

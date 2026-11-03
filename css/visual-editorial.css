@@ -723,3 +723,40 @@ body.visual-editorial .product-item:nth-child(6n+5) .product-img img {
 body.visual-editorial .product-item {
     position: relative;
 }
+
+/* 换色面积强化 */
+body.visual-editorial .hero-cta {
+    background: var(--ed-accent);
+    color: #fff;
+    border-color: var(--ed-accent);
+}
+body.visual-editorial .hero-cta:hover {
+    background: var(--ed-ink);
+    border-color: var(--ed-ink);
+    color: #fff;
+}
+body.visual-editorial .header { border-bottom: 3px double var(--ed-accent) !important; }
+body.visual-editorial .footer { border-top: 4px solid var(--ed-accent) !important; }
+body.visual-editorial .content-panel > h2 {
+    border-left: 8px solid var(--ed-accent);
+    padding-left: 14px;
+}
+body.visual-editorial .content-tabs { border-bottom: 2px solid var(--ed-accent); }
+body.visual-editorial .carousel-section { border-bottom: 3px solid var(--ed-accent); }
+body.visual-editorial .product-item::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -22px;
+    height: 2px;
+    background: var(--ed-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s cubic-bezier(.22,1,.36,1);
+    display: block;
+}
+body.visual-editorial .product-item:hover::after { transform: scaleX(1); }
+body.visual-editorial .product-item:hover .product-img img {
+    outline: 3px solid var(--ed-accent);
+    outline-offset: -3px;
+}

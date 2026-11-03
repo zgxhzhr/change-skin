@@ -1478,3 +1478,62 @@ body.visual-spine .visual-btn.active {
     opacity: 1;
     color: var(--sp-accent);
 }
+/* ==========================================================================
+   结构补完：让 hero 真正"越过分栏线"
+   之前用负边距让整块纸压过去，会遮住书脊内容。
+   改成用一条横穿两栏的粗线做越界物证——它从书脊内部起、穿过书脊线、
+   一直延伸到内容右缘，视觉上把两栏钉在一起，且不遮挡任何文字。
+   ========================================================================== */
+
+body.visual-spine .hero {
+    padding-left: 0;
+    border-left: 0;
+}
+
+body.visual-spine .hero::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -14px;                  /* 穿过脊线即止，不切标签 */
+    right: 0;
+    top: -1px;
+    height: 3px;
+    background: var(--sp-accent);
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* 在这条线上加一个小方形端点，标记"这条线属于内容栏" */
+body.visual-spine .hero::after {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: -6px;
+    width: 14px;
+    height: 14px;
+    background: var(--sp-accent);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* 书脊内容整体左移，给越界线让出右侧空间 */
+body.visual-spine .header {
+    padding-right: 26px;
+}
+
+/* 让书脊内的 5 色与材质列表不贴右边缘 */
+body.visual-spine .theme-tabs,
+body.visual-spine .visual-switch {
+    max-width: 150px;
+}
+/* CTA 强制跟主题色走（此前被基础样式的渐变背景压住） */
+body.visual-spine .hero-cta {
+    background: var(--sp-ink) !important;
+    background-image: none !important;
+    border-color: var(--sp-ink) !important;
+    color: #fff !important;
+}
+body.visual-spine .hero-cta:hover {
+    background: var(--theme-color-dark) !important;
+    border-color: var(--theme-color-dark) !important;
+}

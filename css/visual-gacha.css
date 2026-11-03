@@ -1018,3 +1018,43 @@ body.visual-gacha .header {
 body.visual-gacha .hero::before {
     background: linear-gradient(90deg, transparent, var(--ga-accent), var(--ga-accent-bright), transparent);
 }
+
+/* 换色面积强化：机器本体的结构性灯带与边框接主题色 */
+body.visual-gacha .header {
+    border-bottom: 3px solid var(--ga-accent);
+}
+body.visual-gacha .banner-carousel {
+    border-bottom: 3px solid var(--ga-accent);
+}
+body.visual-gacha .nav {
+    border-bottom: 2px solid var(--ga-accent);
+}
+body.visual-gacha .filter-bar {
+    border-bottom: 3px solid var(--ga-accent);
+}
+body.visual-gacha .footer {
+    border-top: 5px solid var(--ga-accent);
+}
+body.visual-gacha .carousel-section {
+    border-top: 2px solid var(--ga-accent);
+    border-bottom: 2px solid var(--ga-accent);
+}
+body.visual-gacha .content-panel > h2::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 16px;
+    margin-right: 10px;
+    background: var(--ga-accent);
+    vertical-align: -2px;
+}
+body.visual-gacha .product-item::after {
+    background: var(--ga-accent);
+    box-shadow: 0 2px 10px var(--ga-accent);
+}
+body.visual-gacha .product-item:hover {
+    border-color: var(--ga-accent);
+}
+body.visual-gacha .product-item:hover::after {
+    transform: scaleY(1);
+}
