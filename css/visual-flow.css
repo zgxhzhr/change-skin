@@ -1,0 +1,285 @@
+/* ==========================================================================
+   增量层 · 消解分层 (visual-flow.css)
+   目的：把 header / banner / nav / hero / 走马灯 / 标签栏 / 商品区
+         从"一段一个卡片"改成"铺在同一张连续画布上"，消除上下割裂感。
+   手段：只做外观覆盖（背景透明、去圆角、去投影、去独立边框），
+         不改任何布局、尺寸与交互。保留商品卡（商品需要独立承载力）。
+   加载顺序：必须在三套 visual-*.css 之后。
+   ========================================================================== */
+
+/* ---------- 1. 大区块一律去卡片化，融入连续画布 ---------- */
+body[class*="visual-"] .header,
+body[class*="visual-"] .nav,
+body[class*="visual-"] .carousel-section,
+body[class*="visual-"] .filter-bar {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* 头部只留一条分隔，不再是一个盒子 */
+body[class*="visual-"] .header {
+    margin-top: 0 !important;
+    padding: 20px 0 16px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
+}
+
+/* 导航贴着 header 下沿，用细线收尾 */
+body[class*="visual-"] .nav {
+    margin-top: 0 !important;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
+}
+
+/* banner 变成整页宽的主视觉，不再是嵌在页面里的一个圆角盒子 */
+body[class*="visual-"] .banner-carousel {
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* hero 与 banner 同宽，去掉盒子感，只保留自己的底色 */
+body[class*="visual-"] .hero {
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* 走马灯与标签栏：透明，仅留上下呼吸 */
+body[class*="visual-"] .carousel-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body[class*="visual-"] .filter-bar {
+    padding: 18px 0 6px !important;
+}
+
+/* 页脚也融掉，只留一条线 */
+body[class*="visual-"] .footer {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* ---------- 2. 用内容之间的留白取代卡片间距 ---------- */
+body[class*="visual-"] .main-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* ---------- 3. 商品区：卡片保留，但去掉"整块容器"的感觉 ---------- */
+body[class*="visual-"] .content-panels,
+body[class*="visual-"] .content-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body[class*="visual-"] .content-panel > h2 {
+    padding-top: 6px !important;
+    border-bottom: none !important;
+}
+
+/* ---------- 4. 三套风格各自的分隔线样式（保持风格辨识度） ---------- */
+
+/* 漫画：细黑线，像分格线 */
+body.visual-manga .header,
+body.visual-manga .nav {
+    border-bottom: 2px solid var(--mg-ink) !important;
+}
+body.visual-manga .banner-carousel {
+    border-top: 2px solid var(--mg-ink) !important;
+    border-bottom: 2px solid var(--mg-ink) !important;
+}
+body.visual-manga .footer {
+    border-top: 2px solid var(--mg-ink) !important;
+}
+
+/* 和风：细金线 + 朱红短标，像卷轴的界栏 */
+body.visual-wafu .header,
+body.visual-wafu .nav {
+    border-bottom: 1px solid rgba(184, 146, 63, .55) !important;
+}
+body.visual-wafu .banner-carousel {
+    border-top: 2px solid var(--wf-shu) !important;
+    border-bottom: 2px solid var(--wf-shu) !important;
+}
+body.visual-wafu .footer {
+    border-top: 1px solid rgba(184, 146, 63, .5) !important;
+}
+
+/* 手帐：虚线与胶带，像同一页纸上的分栏 */
+body.visual-stationery .header,
+body.visual-stationery .nav {
+    border-bottom: 2px dashed rgba(255, 190, 220, .95) !important;
+}
+body.visual-stationery .banner-carousel {
+    border-top: 2px dashed rgba(255, 190, 220, .95) !important;
+    border-bottom: 2px dashed rgba(255, 190, 220, .95) !important;
+}
+body.visual-stationery .footer {
+    border-top: 2px dashed rgba(255, 190, 220, .95) !important;
+}
+
+/* ---------- 5. 恢复该有的内边距：容器统一留白，不再层层嵌套 ---------- */
+body[class*="visual-"] .header > *,
+body[class*="visual-"] .nav > * {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* 去除 header 内的贴纸/胶带残留定位偏移 */
+body.visual-stationery .header::before {
+    top: -6px !important;
+    left: 8px !important;
+}
+
+/* 手帐 banner 的胶带贴在整宽 banner 顶部两端 */
+body.visual-stationery .banner-carousel::before {
+    left: 40px !important;
+}
+body.visual-stationery .banner-carousel::after {
+    right: 40px !important;
+}
+
+/* ---------- 6. 商品卡：从"独立盒子"改为"贴在纸上的商品" ---------- */
+body.visual-manga .product-item {
+    box-shadow: 4px 4px 0 var(--mg-ink) !important;
+}
+body.visual-manga .product-item:hover {
+    box-shadow: 8px 8px 0 var(--mg-accent), 8px 8px 0 3px var(--mg-ink) !important;
+}
+body.visual-wafu .product-item {
+    box-shadow: 0 6px 16px -14px rgba(90, 60, 20, .8) !important;
+}
+body.visual-stationery .product-item {
+    box-shadow: 0 8px 20px -16px rgba(120, 110, 90, .55) !important;
+}
+
+/* 商品列表上下留白，避免贴死 */
+body[class*="visual-"] .product-list {
+    padding-bottom: 28px;
+}
+
+/* ---------- 7. 彻底连续：容器与 hero 不再自带底色，纹理贯穿整页 ---------- */
+body[class*="visual-"] .container {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+body[class*="visual-"] .hero {
+    background: transparent !important;
+    min-height: 0 !important;
+    padding-top: 34px !important;
+    padding-bottom: 34px !important;
+}
+
+/* hero 的文字区不再被盒子框住，靠留白与斜色块立住版面 */
+body[class*="visual-"] .hero-inner {
+    position: relative;
+    z-index: 1;
+}
+
+/* banner 上下各留一道渐变，让它像"长在页面上"而不是插进去的一块 */
+body[class*="visual-"] .banner-viewport {
+    position: relative;
+}
+body[class*="visual-"] .banner-carousel {
+    box-shadow: none !important;
+}
+
+/* 漫画：banner 上下用黑线收口，视觉上像一页漫画的分格 */
+body.visual-manga .banner-carousel {
+    border-top: 3px solid var(--mg-ink) !important;
+    border-bottom: 3px solid var(--mg-ink) !important;
+}
+
+/* 和风：banner 用朱红双线收口 */
+body.visual-wafu .banner-carousel {
+    border-top: 2px solid var(--wf-shu) !important;
+    border-bottom: 2px solid var(--wf-shu) !important;
+}
+
+/* 手帐：banner 用虚线与胶带连缀到页面 */
+body.visual-stationery .banner-carousel {
+    border-top: 2px dashed rgba(255, 190, 220, .95) !important;
+    border-bottom: 2px dashed rgba(255, 190, 220, .95) !important;
+}
+
+/* 走马灯标题与商品区标题不要顶在容器边 */
+body[class*="visual-"] .carousel-header,
+body[class*="visual-"] .content-panel > h2 {
+    padding-left: 2px !important;
+}
+
+/* ---------- 8. 终局：banner 上下淡出，与页面真正连成一体 ---------- */
+body[class*="visual-"] .banner-carousel {
+    border-top: none !important;
+    border-bottom: none !important;
+    -webkit-mask-image: linear-gradient(180deg,
+        transparent 0%,
+        rgba(0,0,0,.55) 2.5%,
+        #000 7%,
+        #000 90%,
+        rgba(0,0,0,.55) 97.5%,
+        transparent 100%);
+    mask-image: linear-gradient(180deg,
+        transparent 0%,
+        rgba(0,0,0,.55) 2.5%,
+        #000 7%,
+        #000 90%,
+        rgba(0,0,0,.55) 97.5%,
+        transparent 100%);
+}
+
+/* 分隔线全部细化：用"提醒"代替"切断" */
+body.visual-manga .header,
+body.visual-manga .nav {
+    border-bottom-width: 1.5px !important;
+}
+body.visual-wafu .header,
+body.visual-wafu .nav {
+    border-bottom-width: 1px !important;
+}
+body.visual-stationery .header,
+body.visual-stationery .nav {
+    border-bottom-width: 1.5px !important;
+}
+
+/* 导航与 hero 之间不再重复划线 */
+body[class*="visual-"] .nav {
+    margin-bottom: 0 !important;
+}
+
+/* 页面左右留白统一，避免内容贴边造成的"容器感" */
+body[class*="visual-"] .container {
+    padding-left: 26px;
+    padding-right: 26px;
+}
+
+@media (max-width: 768px) {
+    body[class*="visual-"] .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+
+/* 手帐风格：关掉淡出遮罩，保留两端纸胶带（虚线本身已足够柔和） */
+body.visual-stationery .banner-carousel {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    border-top: 2px dashed rgba(255, 190, 220, .95) !important;
+    border-bottom: 2px dashed rgba(255, 190, 220, .95) !important;
+}
