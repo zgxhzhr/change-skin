@@ -592,122 +592,117 @@ body.visual-gacha .content-panel > h2::after {
 
 body.visual-gacha .product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+    gap: 52px 22px;
+    align-items: end;
 }
 
+/* 商品不是卡片，是摆在金属搁板上的货品：无容器、无边框、无投影 */
 body.visual-gacha .product-item {
     position: relative;
-    padding: 22px 16px 20px;
-    background: linear-gradient(180deg, rgba(38, 38, 84, .92), rgba(24, 24, 56, .96));
-    border: 1px solid var(--ga-line);
-    border-radius: 20px;
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .12) inset,
-        -8px -10px 24px -22px rgba(255, 111, 168, .9) inset,
-        0 18px 38px -24px rgba(0, 0, 0, .95);
-    text-align: center;
-    overflow: hidden;
-    transition: transform .24s cubic-bezier(.22, 1, .36, 1), box-shadow .24s, border-color .24s;
+    padding: 0 4px 30px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: left;
+    overflow: visible;
+    transition: transform .24s cubic-bezier(.22, 1, .36, 1);
 }
 
-/* 顶部塑料高光 */
+/* 顶部塑料高光：取消（没有卡片了） */
 body.visual-gacha .product-item::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 44%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .11), transparent);
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
-/* 底部取物口 */
+/* 搁板：图片下方一条金属横梁，左右伸出盖住间隙，形成连续货架 */
 body.visual-gacha .product-item::after {
     content: "";
     position: absolute;
-    left: 50%;
-    bottom: 10px;
-    width: 54px;
-    height: 6px;
-    transform: translateX(-50%);
-    border-radius: 999px;
-    background: #0c0c1f;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .12) inset;
+    left: -16px;
+    right: -16px;
+    top: 162px;
+    height: 9px;
+    border-radius: 4px;
+    background:
+        linear-gradient(180deg, #4a4a80 0%, #30305e 40%, #171733 100%);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, .2) inset,
+        0 8px 16px -6px rgba(0, 0, 0, .9);
     pointer-events: none;
+    z-index: 0;
 }
 
 body.visual-gacha .product-item > * { position: relative; z-index: 1; }
 
 body.visual-gacha .product-item:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 111, 168, .6);
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .16) inset,
-        0 24px 48px -24px rgba(0, 0, 0, .98),
-        0 0 34px -6px rgba(255, 111, 168, .55);
+    transform: translateY(-4px);
+    border-color: transparent;
+    box-shadow: none;
 }
 
 /* 图片：圆形展示窗 + 底光 */
+/* 商品图：直接立在搁板上，无框无底光晕 */
 body.visual-gacha .product-img {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    margin: 0 0 16px;
+    margin: 0 0 22px;
     position: relative;
-    min-height: 148px;
+    min-height: 160px;
 }
 
+/* 底部接触光：商品与搁板的交界处有一小片反光 */
 body.visual-gacha .product-img::before {
     content: "";
     position: absolute;
-    width: 132px;
-    height: 132px;
+    left: 50%;
+    bottom: -6px;
+    width: 130px;
+    height: 26px;
+    transform: translateX(-50%);
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 111, 168, .42) 0%, rgba(255, 111, 168, .12) 46%, transparent 70%);
-    filter: blur(10px);
+    background: radial-gradient(ellipse, rgba(255, 111, 168, .3), transparent 72%);
+    filter: blur(7px);
     transition: transform .3s ease, opacity .3s ease;
 }
 
 body.visual-gacha .product-item:hover .product-img::before {
-    transform: scale(1.18);
-    opacity: .9;
+    transform: translateX(-50%) scaleX(1.2);
+    opacity: .95;
 }
 
 body.visual-gacha .product-img img {
     position: relative;
-    width: 126px;
-    height: 126px;
+    width: 142px;
+    height: 142px;
     object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid rgba(201, 210, 232, .42);
-    box-shadow:
-        0 0 0 5px rgba(201, 210, 232, .07),
-        0 12px 26px -12px rgba(0, 0, 0, .9);
-    transition: transform .3s cubic-bezier(.22, 1, .36, 1), border-color .3s;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 14px 26px -14px rgba(0, 0, 0, .95);
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1);
 }
 
 body.visual-gacha .product-item:hover .product-img img {
-    transform: scale(1.05);
-    border-color: rgba(255, 111, 168, .75);
+    transform: translateY(-3px) scale(1.03);
 }
 
 body.visual-gacha .product-name {
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 800;
     letter-spacing: .01em;
     color: var(--ga-text);
-    margin-bottom: 7px;
+    margin-bottom: 5px;
     transition: color .2s;
 }
 
 body.visual-gacha .product-item:hover .product-name { color: var(--ga-candy); }
 
 body.visual-gacha .product-meta {
-    font-size: 11px;
+    font-size: 10.5px;
     letter-spacing: .03em;
     color: var(--ga-text-muted);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 /* 价格 = 机器刻度，等宽数字 */
