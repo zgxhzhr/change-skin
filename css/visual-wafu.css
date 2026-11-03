@@ -429,3 +429,56 @@ body.visual-wafu .banner-copy {
     left: 74px;
     max-width: 54%;
 }
+
+/* ---------- 让 5 色主题在「和风」中真正生效 ----------
+   原规则用固定的朱红，换色时无反馈。
+   这里把「标识性交互元素」接到 --wf-accent，朱红保留给装饰（金线/印章/点缀）。 */
+body.visual-wafu .theme-tab.active {
+    background: var(--wf-accent);
+    border-color: var(--wf-accent);
+}
+body.visual-wafu .visual-btn.active {
+    background: var(--wf-accent);
+}
+body.visual-wafu .hero-cta {
+    background: var(--wf-accent);
+    border-color: var(--wf-accent);
+}
+body.visual-wafu .hero-cta:hover {
+    background: var(--theme-color-dark);
+}
+body.visual-wafu .hero-highlight {
+    color: var(--wf-accent);
+    -webkit-text-fill-color: var(--wf-accent);
+}
+body.visual-wafu .content-tab.active {
+    background: var(--wf-accent);
+}
+body.visual-wafu .product-price data {
+    color: var(--wf-accent);
+    -webkit-text-fill-color: var(--wf-accent);
+}
+body.visual-wafu .product-item:hover .product-name {
+    color: var(--wf-accent);
+}
+body.visual-wafu .product-item:hover {
+    border-color: var(--wf-accent);
+}
+body.visual-wafu .btn-confirm {
+    background: var(--wf-accent);
+    border-color: var(--wf-accent);
+}
+body.visual-wafu .banner-dots .active {
+    background: var(--wf-accent);
+    border-color: var(--wf-accent);
+}
+body.visual-wafu .banner-tag {
+    background: var(--wf-accent);
+}
+body.visual-wafu .nav-link:hover,
+body.visual-wafu .nav-link.active {
+    color: var(--wf-accent);
+}
+body.visual-wafu .carousel-title::before {
+    color: var(--wf-accent);
+}

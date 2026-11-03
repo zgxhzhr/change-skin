@@ -7,11 +7,11 @@ class ThemeSwitcher {
         this.pendingLogo = null;
         this.pendingTab = null;
         this.themeMap = {
-            red:    { '--theme-color': '#ff0000', '--theme-color-dark': '#cc0000' },
-            green:  { '--theme-color': '#00c800', '--theme-color-dark': '#008a00' },
-            blue:   { '--theme-color': '#0040ff', '--theme-color-dark': '#002db3' },
-            orange: { '--theme-color': '#ff6f00', '--theme-color-dark': '#cc5800' },
-            purple: { '--theme-color': '#7A0080', '--theme-color-dark': '#5a0060' }
+            red:    { '--theme-color': '#ff0000', '--theme-color-dark': '#cc0000', '--theme-color-light': '#ff4d4d', '--theme-color-glow': 'rgba(255, 0, 0, 0.45)' },
+            green:  { '--theme-color': '#00c800', '--theme-color-dark': '#008a00', '--theme-color-light': '#33d633', '--theme-color-glow': 'rgba(0, 200, 0, 0.45)' },
+            blue:   { '--theme-color': '#0040ff', '--theme-color-dark': '#002db3', '--theme-color-light': '#4079ff', '--theme-color-glow': 'rgba(0, 64, 255, 0.45)' },
+            orange: { '--theme-color': '#ff6f00', '--theme-color-dark': '#cc5800', '--theme-color-light': '#ff8c33', '--theme-color-glow': 'rgba(255, 111, 0, 0.45)' },
+            purple: { '--theme-color': '#7A0080', '--theme-color-dark': '#5a0060', '--theme-color-light': '#a039a6', '--theme-color-glow': 'rgba(122, 0, 128, 0.45)' }
         };
         this.themeLabelMap = {
             red: '炽热红', green: '森绿', blue: '深空蓝', orange: '活力橙', purple: '紫晶'
@@ -40,6 +40,18 @@ class ThemeSwitcher {
             document.getElementById('themeNameLabel').textContent = label;
             this.modal.show();
         });
+
+        // 支持 ?theme=red 直接指定配色，便于分享与调试
+        let fromUrl = null;
+        try { fromUrl = new URLSearchParams(location.search).get('theme'); } catch (e) { /* 忽略 */ }
+        if (fromUrl && this.themeMap[fromUrl]) {
+            const tab = this.themeTabs?.querySelector(`.theme-tab[data-theme="${fromUrl}"]`);
+            if (tab) {
+                this.switchTheme(fromUrl, tab.dataset.logo);
+                this.setActive(tab);
+                this.updateAria(tab);
+            }
+        }
     }
 
     switchTheme(color, logoFile) {

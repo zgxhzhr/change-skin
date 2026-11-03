@@ -903,3 +903,118 @@ body.visual-gacha :where(a, button, [tabindex]):focus-visible {
 @media (max-width: 420px) {
     body.visual-gacha .product-list { grid-template-columns: 1fr; }
 }
+
+/* ---------- 让 5 色主题在「扭蛋」中真正生效 ----------
+   深底风格里主题色直接铺会偏暗，统一用 color-mix 提亮后使用；
+   糖果粉/薄荷/柠檬保留给角标与氛围，金属件不动。 */
+body.visual-gacha {
+    --ga-accent-bright: color-mix(in srgb, var(--ga-accent) 62%, #ffffff);
+}
+
+body.visual-gacha .theme-tab.active {
+    background: linear-gradient(180deg, var(--ga-accent-bright), var(--ga-accent));
+    border-color: rgba(255, 255, 255, .5);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--ga-accent) 60%, #000), 0 0 22px var(--ga-accent);
+}
+body.visual-gacha .theme-tab.active .label { color: #fff; }
+
+body.visual-gacha .visual-btn.active {
+    background: linear-gradient(180deg, var(--ga-accent-bright), var(--ga-accent));
+    border-color: rgba(255, 255, 255, .5);
+    color: #fff;
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--ga-accent) 60%, #000), 0 0 20px var(--ga-accent);
+}
+
+body.visual-gacha .hero-cta {
+    background: radial-gradient(circle at 34% 28%, #ffffff 0%,
+        color-mix(in srgb, var(--ga-accent) 30%, #ffffff) 16%,
+        var(--ga-accent-bright) 52%,
+        var(--ga-accent) 100%);
+    box-shadow:
+        0 5px 0 color-mix(in srgb, var(--ga-accent) 55%, #000),
+        0 16px 34px -12px var(--ga-accent),
+        0 1px 0 rgba(255, 255, 255, .9) inset;
+}
+body.visual-gacha .hero-cta:hover {
+    box-shadow:
+        0 7px 0 color-mix(in srgb, var(--ga-accent) 55%, #000),
+        0 20px 40px -12px var(--ga-accent),
+        0 1px 0 rgba(255, 255, 255, .9) inset;
+}
+
+body.visual-gacha .content-tab.active {
+    background: linear-gradient(180deg, var(--ga-accent-bright), var(--ga-accent));
+    border-color: rgba(255, 255, 255, .5);
+    color: #fff;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--ga-accent) 55%, #000), 0 0 22px var(--ga-accent);
+}
+
+body.visual-gacha .product-price data {
+    color: var(--ga-accent-bright);
+    -webkit-text-fill-color: var(--ga-accent-bright);
+    text-shadow: 0 0 16px var(--ga-accent);
+}
+
+body.visual-gacha .product-item:hover .product-name { color: var(--ga-accent-bright); }
+
+body.visual-gacha .product-img::before {
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--ga-accent) 34%, transparent), transparent 72%);
+}
+
+body.visual-gacha .banner-dots .active {
+    background: var(--ga-accent);
+    box-shadow: 0 0 14px var(--ga-accent);
+}
+
+body.visual-gacha .banner-tag {
+    color: var(--ga-accent-bright);
+    border-color: var(--ga-accent);
+    box-shadow: 0 0 16px var(--ga-accent);
+}
+
+body.visual-gacha .btn-confirm {
+    background: radial-gradient(circle at 34% 28%, #ffffff 0%,
+        color-mix(in srgb, var(--ga-accent) 28%, #ffffff) 16%,
+        var(--ga-accent-bright) 54%,
+        var(--ga-accent) 100%);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--ga-accent) 55%, #000);
+}
+
+body.visual-gacha .nav-link:hover,
+body.visual-gacha .nav-link.active {
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--ga-accent) 30%, transparent),
+        color-mix(in srgb, var(--ga-accent) 12%, transparent));
+    box-shadow: 0 0 0 1px var(--ga-accent) inset;
+}
+
+body.visual-gacha .content-panel > h2::after {
+    background: linear-gradient(90deg, var(--ga-accent), var(--ga-accent-bright));
+}
+
+/* 扭蛋：主视觉高亮与品牌强调色接主题色 */
+body.visual-gacha .hero-highlight {
+    color: var(--ga-accent-bright);
+    -webkit-text-fill-color: var(--ga-accent-bright);
+    text-shadow: 0 0 30px var(--ga-accent);
+}
+body.visual-gacha .brand-accent {
+    color: var(--ga-accent-bright);
+    -webkit-text-fill-color: var(--ga-accent-bright);
+    text-shadow: 0 0 16px var(--ga-accent);
+}
+body.visual-gacha .logo {
+    border-color: var(--ga-accent-bright);
+    box-shadow:
+        0 0 0 4px color-mix(in srgb, var(--ga-accent) 22%, transparent),
+        0 0 22px var(--ga-accent);
+}
+body.visual-gacha .header {
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, .16) inset,
+        0 -14px 30px -22px var(--ga-accent) inset,
+        0 20px 44px -26px rgba(0, 0, 0, .9);
+}
+body.visual-gacha .hero::before {
+    background: linear-gradient(90deg, transparent, var(--ga-accent), var(--ga-accent-bright), transparent);
+}
