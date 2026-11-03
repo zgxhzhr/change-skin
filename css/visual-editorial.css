@@ -1,0 +1,725 @@
+/* ==========================================================================
+   风格 D · 编辑排版 / 打破网格 (visual-editorial)
+   12 列手工编排：跨列错落 + 大小对比 + 微旋转 + 不对称留白
+   作用域：body.visual-editorial
+   ========================================================================== */
+
+body.visual-editorial {
+    --ed-paper: #f7f5f1;
+    --ed-ink: #14110f;
+    --ed-line: rgba(20, 17, 15, .14);
+    --ed-accent: var(--theme-color);
+
+    --bg-page: var(--ed-paper);
+    --bg-card: transparent;
+    --bg-subtle: #efece6;
+    --text-primary: var(--ed-ink);
+    --text-secondary: #57504a;
+    --text-muted: #938b83;
+    --border: var(--ed-line);
+    --price-color: var(--ed-accent);
+
+    background-color: var(--ed-paper);
+    background-image:
+        repeating-linear-gradient(90deg, transparent 0 79px, var(--ed-line) 79px 80px);
+    background-position: -1px 0;
+    color: var(--ed-ink);
+    font-feature-settings: "ss01" on;
+}
+
+body.visual-editorial .bg-decor { display: none; }
+body.visual-editorial .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* ---------- Header：刊头 ---------- */
+body.visual-editorial .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 42px 0 14px;
+    border-bottom: 3px double var(--ed-ink);
+    background: transparent;
+}
+body.visual-editorial .brand {
+    align-items: flex-end;
+    gap: 14px;
+}
+body.visual-editorial .brand-name {
+    font-family: "Songti SC", "SimSun", Georgia, serif;
+    font-size: 42px;
+    line-height: .92;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    color: var(--ed-ink);
+    -webkit-text-fill-color: var(--ed-ink);
+    background: none;
+}
+body.visual-editorial .brand-accent {
+    color: var(--ed-accent);
+    -webkit-text-fill-color: var(--ed-accent);
+    background: none;
+}
+body.visual-editorial .logo {
+    border-radius: 0;
+    border: 2px solid var(--ed-ink);
+    filter: grayscale(.35);
+    width: 40px;
+    height: 40px;
+}
+
+/* 主题 tab：极简文字 + 细下划线 */
+body.visual-editorial .theme-tabs {
+    gap: 2px;
+}
+body.visual-editorial .theme-tab {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 6px 9px;
+    position: relative;
+}
+body.visual-editorial .theme-tab .label {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+}
+body.visual-editorial .theme-tab .swatch {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--ed-ink);
+}
+body.visual-editorial .theme-tab:hover { background: transparent; transform: none; }
+body.visual-editorial .theme-tab:hover .label { color: var(--ed-ink); }
+body.visual-editorial .theme-tab.active { background: transparent; box-shadow: none; }
+body.visual-editorial .theme-tab.active .label { color: var(--ed-ink); font-weight: 800; }
+body.visual-editorial .theme-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    bottom: 0;
+    height: 2px;
+    background: var(--ed-accent);
+}
+
+/* 风格切换：文字标签 */
+body.visual-editorial .visual-switch {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    gap: 0;
+}
+body.visual-editorial .visual-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: color .2s;
+}
+body.visual-editorial .visual-btn:hover { color: var(--ed-ink); }
+body.visual-editorial .visual-btn.active {
+    color: var(--ed-accent);
+    font-weight: 800;
+}
+
+/* ---------- Banner：横贯大图 + 刊号角标 ---------- */
+body.visual-editorial .banner-carousel {
+    margin: 26px 0 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid var(--ed-ink);
+    box-shadow: none;
+}
+body.visual-editorial .banner-slide::after {
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.28) 46%, rgba(0,0,0,0) 74%),
+        linear-gradient(0deg, rgba(0,0,0,.28), transparent 50%);
+}
+body.visual-editorial .banner-tag {
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,.85);
+    border-radius: 0;
+    letter-spacing: .22em;
+    font-weight: 700;
+    box-shadow: none;
+}
+body.visual-editorial .banner-title {
+    font-family: "Songti SC", "SimSun", Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(30px, 3.6vw, 46px);
+    letter-spacing: -.02em;
+    line-height: 1.06;
+    text-shadow: 0 2px 18px rgba(0,0,0,.5);
+}
+body.visual-editorial .banner-text {
+    letter-spacing: .06em;
+    font-size: 12.5px;
+}
+body.visual-editorial .banner-cta {
+    background: var(--ed-accent);
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    letter-spacing: .18em;
+    font-weight: 800;
+    padding: 12px 26px;
+    box-shadow: none;
+    transition: background .25s, transform .25s;
+}
+body.visual-editorial .banner-cta:hover { background: var(--ed-ink); transform: translateX(4px); }
+body.visual-editorial .banner-arrow {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,.8);
+    border-radius: 0;
+    color: #fff;
+    box-shadow: none;
+}
+body.visual-editorial .banner-dots button {
+    background: rgba(255,255,255,.5);
+    border-radius: 0;
+    width: 14px;
+    height: 3px;
+}
+body.visual-editorial .banner-dots .active { background: #fff; width: 30px; }
+body.visual-editorial .banner-hint {
+    background: transparent;
+    color: rgba(255,255,255,.85);
+    border: none;
+    border-radius: 0;
+    letter-spacing: .12em;
+    font-size: 10.5px;
+}
+
+/* ---------- 主导航：横排刊目 ---------- */
+body.visual-editorial .nav {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ed-ink);
+    background: transparent;
+}
+body.visual-editorial .nav-link {
+    border-radius: 0;
+    color: var(--ed-ink);
+    font-size: 13px;
+    letter-spacing: .1em;
+    font-weight: 700;
+    padding: 6px 0;
+    margin-right: 26px;
+}
+body.visual-editorial .nav-link::after { display: none; }
+body.visual-editorial .nav-link:hover,
+body.visual-editorial .nav-link.active {
+    background: transparent;
+    color: var(--ed-accent);
+}
+body.visual-editorial .submenu {
+    background: #fff;
+    border: 1px solid var(--ed-ink);
+    border-radius: 0;
+    box-shadow: 8px 8px 0 rgba(20,17,15,.12);
+}
+body.visual-editorial .submenu a {
+    letter-spacing: .06em;
+    border-radius: 0;
+}
+body.visual-editorial .submenu a:hover { background: var(--ed-accent); color: #fff; }
+
+/* ---------- Hero：杂志大标题，斜排 ---------- */
+body.visual-editorial .hero {
+    padding: 56px 0 44px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+}
+body.visual-editorial .hero-inner { position: relative; z-index: 1; }
+body.visual-editorial .hero::before {
+    content: "2026";
+    position: absolute;
+    right: 0;
+    top: 30px;
+    font-family: "Songti SC", Georgia, serif;
+    font-size: clamp(90px, 15vw, 210px);
+    line-height: .8;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(20,17,15,.16);
+    pointer-events: none;
+    z-index: 0;
+}
+body.visual-editorial .hero-tag {
+    background: transparent;
+    color: var(--ed-accent);
+    border: none;
+    border-left: 3px solid var(--ed-accent);
+    border-radius: 0;
+    padding: 2px 0 2px 12px;
+    letter-spacing: .24em;
+    font-weight: 800;
+    font-size: 11.5px;
+}
+body.visual-editorial .hero-title {
+    font-family: "Songti SC", "SimSun", Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(36px, 6.2vw, 82px);
+    line-height: .96;
+    letter-spacing: -.04em;
+    color: var(--ed-ink);
+    margin: 18px 0 16px;
+    max-width: 15em;
+}
+body.visual-editorial .hero-highlight {
+    color: var(--ed-accent);
+    -webkit-text-fill-color: var(--ed-accent);
+    background: none;
+    font-style: italic;
+}
+body.visual-editorial .hero-desc {
+    max-width: 34em;
+    color: var(--text-secondary);
+    letter-spacing: .04em;
+}
+body.visual-editorial .hero-cta {
+    background: transparent;
+    color: var(--ed-ink);
+    border: 1.5px solid var(--ed-ink);
+    border-radius: 0;
+    letter-spacing: .2em;
+    font-weight: 800;
+    padding: 14px 30px;
+    box-shadow: none;
+    transition: background .25s, color .25s, transform .25s;
+}
+body.visual-editorial .hero-cta:hover {
+    background: var(--ed-ink);
+    color: #fff;
+    transform: translateX(6px);
+}
+body.visual-editorial .hero-orb { display: none; }
+
+/* ---------- 走马灯：横向图版 ---------- */
+body.visual-editorial .carousel-section {
+    padding: 8px 0 26px;
+    border-bottom: 1px solid var(--ed-line);
+    background: transparent;
+}
+body.visual-editorial .carousel-title {
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 20px;
+    letter-spacing: .06em;
+    font-weight: 900;
+}
+body.visual-editorial .carousel-hint { letter-spacing: .1em; font-size: 10.5px; }
+body.visual-editorial #carouselList > li img {
+    border-radius: 0;
+    border: none;
+    filter: grayscale(.25);
+    transition: filter .35s, transform .35s;
+}
+body.visual-editorial #carouselList > li img:hover {
+    filter: grayscale(0);
+    transform: scale(1.04);
+}
+
+/* ---------- 内容标签：横排文字，无胶囊 ---------- */
+body.visual-editorial .content-tabs {
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 0;
+    border-bottom: 1px solid var(--ed-ink);
+    border-radius: 0;
+}
+body.visual-editorial .content-tab {
+    border-radius: 0;
+    padding: 12px 22px 10px 0;
+    color: var(--text-muted);
+    letter-spacing: .1em;
+    font-weight: 700;
+    font-size: 12.5px;
+    position: relative;
+}
+body.visual-editorial .content-tab:hover { background: transparent; color: var(--ed-ink); transform: none; }
+body.visual-editorial .content-tab.active {
+    background: transparent;
+    color: var(--ed-ink);
+    box-shadow: none;
+}
+body.visual-editorial .content-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 22px;
+    bottom: -1px;
+    height: 3px;
+    background: var(--ed-accent);
+}
+
+/* ==========================================================================
+   核心：打破网格 —— 12 列手工编排
+   ========================================================================== */
+body.visual-editorial .content-panel > h2 {
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 30px;
+    letter-spacing: .02em;
+    font-weight: 900;
+    margin: 34px 0 24px;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+body.visual-editorial .content-panel > h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--ed-ink);
+    opacity: .35;
+    transform: translateY(-6px);
+}
+
+body.visual-editorial .product-list {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 46px 26px;
+    align-items: start;
+}
+
+/* 默认占 3 列 */
+body.visual-editorial .product-item {
+    grid-column: span 3;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+body.visual-editorial .product-item::before,
+body.visual-editorial .product-item::after { display: none; }
+
+/* 每 6 个一组的手工节奏：5 + 4 + 3 || 3 + 6 + 3 */
+body.visual-editorial .product-item:nth-child(6n+1) {
+    grid-column: span 5;
+    transform: rotate(-.8deg);
+}
+body.visual-editorial .product-item:nth-child(6n+2) {
+    grid-column: span 4;
+    margin-top: 34px;
+}
+body.visual-editorial .product-item:nth-child(6n+3) {
+    grid-column: span 3;
+    transform: rotate(.6deg);
+}
+body.visual-editorial .product-item:nth-child(6n+4) {
+    grid-column: span 3;
+    margin-top: 18px;
+}
+body.visual-editorial .product-item:nth-child(6n+5) {
+    grid-column: span 6;
+    transform: rotate(.4deg);
+}
+body.visual-editorial .product-item:nth-child(6n+6) {
+    grid-column: span 3;
+    margin-top: 42px;
+}
+
+/* 大卡：图片更高、名字更大 */
+body.visual-editorial .product-item:nth-child(6n+1) .product-img img,
+body.visual-editorial .product-item:nth-child(6n+5) .product-img img {
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
+body.visual-editorial .product-item:nth-child(6n+1) .product-name,
+body.visual-editorial .product-item:nth-child(6n+5) .product-name {
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -.01em;
+}
+
+/* 常规卡图片 */
+body.visual-editorial .product-img {
+    margin: 0 0 14px;
+    justify-content: flex-start;
+}
+body.visual-editorial .product-img img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    filter: grayscale(.18);
+    transition: filter .4s, transform .4s;
+}
+body.visual-editorial .product-item:hover .product-img img {
+    filter: grayscale(0);
+    transform: scale(1.02);
+    box-shadow: none;
+}
+body.visual-editorial .product-item:hover {
+    transform: translateY(-4px) rotate(0deg);
+}
+
+body.visual-editorial .product-name {
+    font-size: 15.5px;
+    font-weight: 800;
+    letter-spacing: .01em;
+    text-align: left;
+    margin-bottom: 6px;
+    color: var(--ed-ink);
+}
+body.visual-editorial .product-item:hover .product-name { color: var(--ed-accent); }
+
+body.visual-editorial .product-meta {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+body.visual-editorial .product-price {
+    text-align: left;
+}
+body.visual-editorial .product-price data {
+    background: none;
+    -webkit-text-fill-color: var(--ed-accent);
+    color: var(--ed-accent);
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: -.01em;
+}
+
+/* 角标：方框数字感 */
+body.visual-editorial .product-badge,
+body.visual-editorial .rank-badge {
+    background: var(--ed-ink);
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    font-size: 10px;
+    letter-spacing: .14em;
+    padding: 4px 9px;
+    box-shadow: none;
+    font-weight: 800;
+}
+body.visual-editorial .product-badge.hot { background: #b3261e; }
+body.visual-editorial .product-badge.new { background: var(--ed-ink); }
+body.visual-editorial .product-badge.sale { background: var(--ed-accent); }
+body.visual-editorial .rank-badge {
+    background: transparent;
+    color: var(--ed-ink);
+    border: 1px solid var(--ed-ink);
+    font-size: 15px;
+}
+
+/* ---------- 页脚 ---------- */
+body.visual-editorial .footer {
+    border-top: 3px double var(--ed-ink);
+    background: transparent;
+    border-radius: 0;
+    margin-top: 46px;
+    padding: 22px 0;
+}
+body.visual-editorial .footer small {
+    color: var(--text-secondary);
+    letter-spacing: .1em;
+    font-size: 11px;
+}
+
+/* ---------- Modal ---------- */
+body.visual-editorial .modal {
+    background: #fff;
+    border: 1.5px solid var(--ed-ink);
+    border-radius: 0;
+    box-shadow: 14px 14px 0 rgba(20,17,15,.14);
+}
+body.visual-editorial .modal-head { border-bottom: 1.5px solid var(--ed-ink); }
+body.visual-editorial .modal-title {
+    background: none;
+    -webkit-text-fill-color: var(--ed-ink);
+    color: var(--ed-ink);
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 22px;
+    letter-spacing: .02em;
+}
+body.visual-editorial .btn-confirm {
+    background: var(--ed-ink);
+    color: #fff;
+    border-radius: 0;
+    letter-spacing: .14em;
+    font-weight: 800;
+    box-shadow: none;
+}
+body.visual-editorial .btn-cancel {
+    background: transparent;
+    color: var(--ed-ink);
+    border: 1.5px solid var(--ed-ink);
+    border-radius: 0;
+    letter-spacing: .14em;
+}
+body.visual-editorial .modal-mask { background: rgba(20,17,15,.5); }
+body.visual-editorial #debugToggle {
+    background: var(--ed-ink);
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.visual-editorial ::-webkit-scrollbar { width: 8px; }
+body.visual-editorial ::-webkit-scrollbar-track { background: var(--ed-paper); }
+body.visual-editorial ::-webkit-scrollbar-thumb { background: var(--ed-ink); border-radius: 0; }
+body.visual-editorial ::selection { background: var(--ed-ink); color: var(--ed-paper); }
+
+/* ---------- 响应式：小屏退回规整两列，保证可用 ---------- */
+@media (max-width: 1100px) {
+    body.visual-editorial .product-item,
+    body.visual-editorial .product-item:nth-child(n) {
+        grid-column: span 6 !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+    body.visual-editorial .product-img img { height: 200px !important; }
+    body.visual-editorial .hero::before { display: none; }
+}
+@media (max-width: 640px) {
+    body.visual-editorial .container { padding: 0 18px; }
+    body.visual-editorial .brand-name { font-size: 30px; }
+    body.visual-editorial .product-item,
+    body.visual-editorial .product-item:nth-child(n) {
+        grid-column: span 12 !important;
+    }
+    body.visual-editorial .product-img img { height: 220px !important; }
+    body.visual-editorial .hero-title { font-size: clamp(30px, 9vw, 44px); }
+}
+
+/* ---------- 覆盖 visual-flow 通用消解层：本风格的编排由自己掌控 ---------- */
+body.visual-editorial .container {
+    padding: 0 40px !important;
+    background: transparent !important;
+}
+body.visual-editorial .header {
+    padding: 42px 0 14px !important;
+    margin: 0 !important;
+    border-bottom: 3px double var(--ed-ink) !important;
+    background: transparent !important;
+}
+body.visual-editorial .nav {
+    padding: 14px 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid var(--ed-ink) !important;
+    background: transparent !important;
+}
+body.visual-editorial .banner-carousel {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--ed-ink) !important;
+    box-shadow: none !important;
+    margin: 26px 0 0 !important;
+}
+body.visual-editorial .hero {
+    padding: 56px 0 44px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+body.visual-editorial .carousel-section {
+    padding: 8px 0 26px !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body.visual-editorial .filter-bar {
+    padding: 12px 0 0 !important;
+    background: transparent !important;
+}
+body.visual-editorial .footer {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body.visual-editorial .main-content {
+    padding: 0 !important;
+}
+@media (max-width: 640px) {
+    body.visual-editorial .container { padding: 0 18px !important; }
+}
+
+/* ---------- 终修：按钮与标签栏的残留样式 ---------- */
+body.visual-editorial .hero-cta {
+    background: transparent !important;
+    color: var(--ed-ink) !important;
+    border: 1.5px solid var(--ed-ink) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+body.visual-editorial .hero-cta:hover {
+    background: var(--ed-ink) !important;
+    color: #fff !important;
+}
+body.visual-editorial .content-tab {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+body.visual-editorial .content-tab.active {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--ed-ink) !important;
+}
+body.visual-editorial .content-tabs {
+    border: none !important;
+    border-bottom: 1px solid var(--ed-ink) !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* ---------- 修正：角标归位到图片左上，图片保持比例不裁坏商品 ---------- */
+body.visual-editorial .product-badge,
+body.visual-editorial .rank-badge {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+    z-index: 4 !important;
+}
+
+body.visual-editorial .product-img img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* 大卡用略宽的横幅比例，裁切有编辑感但不切主体 */
+body.visual-editorial .product-item:nth-child(6n+1) .product-img img,
+body.visual-editorial .product-item:nth-child(6n+5) .product-img img {
+    height: auto !important;
+    aspect-ratio: 4 / 3;
+}
+
+/* 图片作为版面元素，不参与卡片旋转，避免角标与图错位 */
+body.visual-editorial .product-item {
+    position: relative;
+}
