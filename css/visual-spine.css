@@ -1351,3 +1351,130 @@ body.visual-spine .product-name { grid-area: name; align-self: end; }
 body.visual-spine .product-meta { grid-area: meta; align-self: start; margin-top: 2px; }
 body.visual-spine .product-price { grid-area: price; grid-row: 1 / 3; align-self: center; }
 body.visual-spine .product-img { grid-area: plate; grid-row: 1 / 3; }
+/* ==========================================================================
+   换色存在感强化
+   之前主题色只落在色点/小标签/hover 上，面积太小，换色几乎无感知。
+   这里把主题色提到"结构性位置"：贯穿整页的竖线、主按钮、价格列、
+   板块标题的边条、页脚压边——都是换色时一眼能看到的面积。
+   ========================================================================== */
+
+/* 1) 书脊右边缘：换成一整条主题色脊线，贯穿全页高度 */
+body.visual-spine .header {
+    border-right: 3px solid var(--sp-accent);
+}
+
+/* 2) 主按钮：默认就是主题色（原来只有 hover 才变） */
+body.visual-spine .hero-cta {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+    color: #fff;
+}
+
+body.visual-spine .hero-cta:hover {
+    background: var(--theme-color-dark);
+    border-color: var(--theme-color-dark);
+    letter-spacing: .3em;
+}
+
+/* 3) 价格列：默认主题色，hover 加深 */
+body.visual-spine .product-price data {
+    color: var(--sp-accent);
+    -webkit-text-fill-color: var(--sp-accent);
+    font-weight: 700;
+}
+
+body.visual-spine .product-item:hover .product-price data {
+    color: var(--theme-color-dark);
+    -webkit-text-fill-color: var(--theme-color-dark);
+}
+
+/* 4) 板块标题：左侧主题色竖条 */
+body.visual-spine .content-panel > h2 {
+    border-left: 4px solid var(--sp-accent);
+    padding-left: 12px;
+    border-bottom: 2px solid var(--sp-ink);
+}
+
+body.visual-spine .carousel-title {
+    border-left: 4px solid var(--sp-accent);
+    padding-left: 10px;
+}
+
+/* 5) 胶带上下压主题色细线 */
+body.visual-spine .carousel-section {
+    border-top: 2px solid var(--sp-accent);
+    border-bottom: 2px solid var(--sp-accent);
+}
+
+/* 6) 导航当前项：底部粗线用主题色 */
+body.visual-spine .nav-link::after {
+    height: 3px;
+    background: var(--sp-accent);
+}
+
+/* 7) hero 纸条左缘：主题色压边，标记"这块纸压进来" */
+body.visual-spine .hero {
+    border-left: 5px solid var(--sp-accent);
+    padding-left: 26px;
+}
+
+/* 8) 页脚：顶部主题色压边 */
+body.visual-spine .footer {
+    border-top: 5px solid var(--sp-accent);
+}
+
+/* 9) 商品行 hover：左侧主题色竖条 */
+body.visual-spine .product-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: var(--sp-accent);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform .25s cubic-bezier(.22, 1, .36, 1);
+    display: block;
+}
+
+body.visual-spine .product-item:hover::after {
+    transform: scaleY(1);
+}
+
+/* 10) 书脊上的当前主题色点：加一圈主题色光环 */
+body.visual-spine .theme-tab.active .swatch {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--sp-accent) 22%, transparent);
+}
+
+/* 11) banner 主标签与 CTA 已用主题色，这里让箭头 hover 也响应 */
+body.visual-spine .banner-arrow:hover {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+}
+
+/* 12) 弹窗确认按钮 */
+body.visual-spine .btn-confirm {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+    color: #fff;
+}
+
+body.visual-spine .btn-confirm:hover {
+    background: var(--theme-color-dark);
+    border-color: var(--theme-color-dark);
+}
+/* 书脊标签文字最后压深一档（之前 --sp-ink-soft 在深纸色上仍偏淡） */
+body.visual-spine .theme-tab .label {
+    color: var(--sp-ink);
+    opacity: .85;
+}
+body.visual-spine .visual-btn {
+    color: var(--sp-ink);
+    opacity: .8;
+}
+body.visual-spine .theme-tab.active .label,
+body.visual-spine .visual-btn.active {
+    opacity: 1;
+    color: var(--sp-accent);
+}
