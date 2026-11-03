@@ -17,8 +17,13 @@
     <link rel="stylesheet" href="css/visual-flow.css">
     <!-- 第四套：编辑排版·打破网格（须在通用层之后，自行接管编排） -->
     <link rel="stylesheet" href="css/visual-editorial.css">
+    <!-- 第五套：扭蛋商店（塑料+金属材质，最后加载） -->
+    <link rel="stylesheet" href="css/visual-gacha.css">
 </head>
 <body class="visual-manga">
+
+    <a class="skip-link" href="#mainContent">跳到主要内容</a>
+
 
     <div class="bg-decor">
         <span class="blob blob-1"></span>
@@ -47,6 +52,7 @@
                 <button type="button" class="visual-btn" data-visual="wafu" title="和风浮世绘风格">和风</button>
                 <button type="button" class="visual-btn" data-visual="stationery" title="手帐文具风格">手帐</button>
                 <button type="button" class="visual-btn" data-visual="editorial" title="编辑排版·打破网格风格">杂志</button>
+                <button type="button" class="visual-btn" data-visual="gacha" title="扭蛋商店风格">扭蛋</button>
             </div>
         </header>
 
@@ -56,7 +62,7 @@
             <div class="banner-viewport">
                 <ul class="banner-track" id="bannerTrack">
                     <li class="banner-slide" data-color="#e11d48">
-                        <img class="banner-img" src="img/banner-red.jpg" alt="炽热红主题推荐">
+                        <img class="banner-img" src="img/banner-red.jpg" alt="炽热红主题推荐" fetchpriority="high" decoding="sync">
                         <div class="banner-copy">
                             <span class="banner-tag">THEME 01 · 炽热红</span>
                             <h2 class="banner-title">赤红觉醒，点燃最强战线</h2>
@@ -167,7 +173,7 @@
             </ul>
         </nav>
 
-        <main class="main-content">
+        <main class="main-content" id="mainContent">
             <section class="hero">
                 <div class="hero-inner">
                     <p class="hero-tag">NEW · 2026 异世界焕新季</p>

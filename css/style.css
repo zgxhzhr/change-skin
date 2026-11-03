@@ -1325,3 +1325,67 @@ body.mobile-view .product-price {
         height: 110px;
     }
 }
+/* ==========================================================================
+   可访问性与性能基线（增量追加，不改动任何既有规则）
+   ========================================================================== */
+
+/* 键盘焦点必须可见（WCAG 2.4.7） */
+:focus-visible {
+    outline: 2px solid var(--theme-color);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* 深色风格下焦点环需与背景有 3:1 对比 */
+body.visual-gacha :focus-visible,
+body.visual-editorial :focus-visible {
+    outline-color: #ffd93d;
+}
+
+/* 尊重系统的"减少动效"设置（WCAG 2.3.3） */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .carousel-window ul,
+    .banner-track {
+        transform: none !important;
+    }
+}
+
+/* 跳转链接：键盘用户可跳过重复导航（WCAG 2.4.1） */
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -60px;
+    z-index: 999;
+    padding: 12px 20px;
+    background: var(--theme-color);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top .2s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* 屏幕阅读器专用文本 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
