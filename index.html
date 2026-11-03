@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="换肤商城 — 服装鞋帽数码一站式浏览，支持一键换肤">
     <title>换肤商城 MODERN · 主题演示</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/banner.css">
 </head>
 <body>
 
@@ -32,6 +34,64 @@
                 </ul>
             </nav>
         </header>
+
+        <!-- 主题 Banner 轮播（位于主导航上方） -->
+        <section class="banner-carousel" id="bannerCarousel" aria-roledescription="carousel"
+                 aria-label="主题推荐轮播" tabindex="0">
+            <div class="banner-viewport">
+                <ul class="banner-track" id="bannerTrack">
+                    <li class="banner-slide" data-color="#e11d48">
+                        <img class="banner-img" src="img/banner-red.jpg" alt="炽热红主题推荐">
+                        <div class="banner-copy">
+                            <span class="banner-tag">THEME 01 · 炽热红</span>
+                            <h2 class="banner-title">热烈开场，给秋天一点红</h2>
+                            <p class="banner-text">新品服饰限时 8 折 · 满 299 减 50</p>
+                            <a class="banner-cta" href="#productArea">立即选购</a>
+                        </div>
+                    </li>
+                    <li class="banner-slide" data-color="#16a34a">
+                        <img class="banner-img" src="img/banner-green.jpg" alt="森绿主题推荐">
+                        <div class="banner-copy">
+                            <span class="banner-tag">THEME 02 · 森绿</span>
+                            <h2 class="banner-title">自然呼吸，把绿色穿在身上</h2>
+                            <p class="banner-text">森系家居与数码好物 · 低至 7 折</p>
+                            <a class="banner-cta" href="#productArea">立即选购</a>
+                        </div>
+                    </li>
+                    <li class="banner-slide" data-color="#2563eb">
+                        <img class="banner-img" src="img/banner-blue.jpg" alt="深空蓝主题推荐">
+                        <div class="banner-copy">
+                            <span class="banner-tag">THEME 03 · 深空蓝</span>
+                            <h2 class="banner-title">冷静升级，效率也要配色</h2>
+                            <p class="banner-text">笔记本 / 键鼠套装 · 满 1000 减 100</p>
+                            <a class="banner-cta" href="#productArea">立即选购</a>
+                        </div>
+                    </li>
+                    <li class="banner-slide" data-color="#ea580c">
+                        <img class="banner-img" src="img/banner-orange.jpg" alt="活力橙主题推荐">
+                        <div class="banner-copy">
+                            <span class="banner-tag">THEME 04 · 活力橙</span>
+                            <h2 class="banner-title">点亮通勤，今天活力满格</h2>
+                            <p class="banner-text">运动鞋服第二件半价 · 会员再享 9 折</p>
+                            <a class="banner-cta" href="#productArea">立即选购</a>
+                        </div>
+                    </li>
+                    <li class="banner-slide" data-color="#7c3aed">
+                        <img class="banner-img" src="img/banner-purple.jpg" alt="紫晶主题推荐">
+                        <div class="banner-copy">
+                            <span class="banner-tag">THEME 05 · 紫晶</span>
+                            <h2 class="banner-title">高级紫调，夜场主角登场</h2>
+                            <p class="banner-text">会员专享 9 折 · 积分翻倍</p>
+                            <a class="banner-cta" href="#productArea">立即选购</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <button class="banner-arrow banner-prev" type="button" aria-label="上一张">‹</button>
+            <button class="banner-arrow banner-next" type="button" aria-label="下一张">›</button>
+            <div class="banner-dots" id="bannerDots" role="tablist" aria-label="选择轮播图"></div>
+            <div class="banner-hint">自动播放 · 悬停暂停</div>
+        </section>
 
         <nav class="nav" aria-label="主导航">
             <button class="hamburger" aria-label="打开菜单" aria-expanded="false">
@@ -115,7 +175,7 @@
                 </div>
             </section>
 
-            <section class="filter-bar" aria-label="商品筛选">
+            <section class="filter-bar" id="productArea" aria-label="商品筛选">
                 <ul class="content-tabs" role="tablist">
                     <li class="content-tab active" data-tab="all"      role="tab" aria-selected="true">✨ 全部商品</li>
                     <li class="content-tab" data-tab="newest"  role="tab" aria-selected="false">🆕 最新上架</li>
@@ -367,6 +427,7 @@
     </div>
 
     <script src="js/mulModal.base.js"></script>
+    <script src="js/banner-carousel.js"></script>
     <script src="js/main.js" defer></script>
 
 </body>

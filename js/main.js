@@ -288,7 +288,8 @@ const init = () => {
         Hamburger,
         DebugToggle,
         ContentTabs,
-        ImageCarousel
+        ImageCarousel,
+        BannerCarousel
     ].forEach(Cls => new Cls().bindEvents());
 
     new ModalsInit().bindEvents();
