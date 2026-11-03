@@ -8,10 +8,10 @@
    ========================================================================== */
 
 /* ---------- 1. 大区块一律去卡片化，融入连续画布 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .header,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .nav,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .carousel-section,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .filter-bar {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .header,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .nav,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .carousel-section,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .filter-bar {
     background: transparent !important;
     border: none !important;
     border-radius: 0 !important;
@@ -23,21 +23,21 @@ body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .filter-bar {
 }
 
 /* 头部只留一条分隔，不再是一个盒子 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .header {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .header {
     margin-top: 0 !important;
     padding: 20px 0 16px !important;
     border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
 }
 
 /* 导航贴着 header 下沿，用细线收尾 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .nav {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .nav {
     margin-top: 0 !important;
     padding: 10px 0 !important;
     border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
 }
 
 /* banner 变成整页宽的主视觉，不再是嵌在页面里的一个圆角盒子 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .banner-carousel {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .banner-carousel {
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -46,7 +46,7 @@ body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .banner-carouse
 }
 
 /* hero 与 banner 同宽，去掉盒子感，只保留自己的底色 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .hero {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .hero {
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -55,17 +55,17 @@ body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .hero {
 }
 
 /* 走马灯与标签栏：透明，仅留上下呼吸 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .carousel-section {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .carousel-section {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .filter-bar {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .filter-bar {
     padding: 18px 0 6px !important;
 }
 
 /* 页脚也融掉，只留一条线 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .footer {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .footer {
     border-radius: 0 !important;
     box-shadow: none !important;
     margin-left: 0 !important;
@@ -73,20 +73,20 @@ body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .footer {
 }
 
 /* ---------- 2. 用内容之间的留白取代卡片间距 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .main-content {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .main-content {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
 /* ---------- 3. 商品区：卡片保留，但去掉"整块容器"的感觉 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .content-panels,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .content-panel {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .content-panels,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .content-panel {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .content-panel > h2 {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .content-panel > h2 {
     padding-top: 6px !important;
     border-bottom: none !important;
 }
@@ -133,8 +133,8 @@ body.visual-stationery .footer {
 }
 
 /* ---------- 5. 恢复该有的内边距：容器统一留白，不再层层嵌套 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .header > *,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .nav > * {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .header > *,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .nav > * {
     padding-left: 4px;
     padding-right: 4px;
 }
@@ -168,18 +168,18 @@ body.visual-stationery .product-item {
 }
 
 /* 商品列表上下留白，避免贴死 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .product-list {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .product-list {
     padding-bottom: 28px;
 }
 
 /* ---------- 7. 彻底连续：容器与 hero 不再自带底色，纹理贯穿整页 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .container {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .container {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
 }
 
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .hero {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .hero {
     background: transparent !important;
     min-height: 0 !important;
     padding-top: 34px !important;
@@ -187,16 +187,16 @@ body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .hero {
 }
 
 /* hero 的文字区不再被盒子框住，靠留白与斜色块立住版面 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .hero-inner {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .hero-inner {
     position: relative;
     z-index: 1;
 }
 
 /* banner 上下各留一道渐变，让它像"长在页面上"而不是插进去的一块 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .banner-viewport {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .banner-viewport {
     position: relative;
 }
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .banner-carousel {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .banner-carousel {
     box-shadow: none !important;
 }
 
@@ -219,13 +219,13 @@ body.visual-stationery .banner-carousel {
 }
 
 /* 走马灯标题与商品区标题不要顶在容器边 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .carousel-header,
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .content-panel > h2 {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .carousel-header,
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .content-panel > h2 {
     padding-left: 2px !important;
 }
 
 /* ---------- 8. 终局：banner 上下淡出，与页面真正连成一体 ---------- */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .banner-carousel {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .banner-carousel {
     border-top: none !important;
     border-bottom: none !important;
     -webkit-mask-image: linear-gradient(180deg,
@@ -259,18 +259,18 @@ body.visual-stationery .nav {
 }
 
 /* 导航与 hero 之间不再重复划线 */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .nav {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .nav {
     margin-bottom: 0 !important;
 }
 
 /* 页面左右留白统一，避免内容贴边造成的"容器感" */
-body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .container {
+body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .container {
     padding-left: 26px;
     padding-right: 26px;
 }
 
 @media (max-width: 768px) {
-    body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha) .container {
+    body[class*="visual-"]:not(.visual-editorial):not(.visual-gacha):not(.visual-spine) .container {
         padding-left: 14px;
         padding-right: 14px;
     }

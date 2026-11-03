@@ -6,19 +6,20 @@
     <meta name="description" content="异世界商城 — 二次元幻想装备、手办周边与数码好物一站式浏览，支持一键换肤">
     <title>异世界商城 MODERN · 主题演示</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="css/style.css?v=20261103c">
-    <link rel="stylesheet" href="css/modal.css?v=20261103c">
-    <link rel="stylesheet" href="css/banner.css?v=20261103c">
+    <link rel="stylesheet" href="css/style.css?v=20261103d">
+    <link rel="stylesheet" href="css/modal.css?v=20261103d">
+    <link rel="stylesheet" href="css/banner.css?v=20261103d">
     <!-- 三套并行视觉风格（通过 body.visual-* 切换，互不干扰） -->
-    <link rel="stylesheet" href="css/visual-manga.css?v=20261103c">
-    <link rel="stylesheet" href="css/visual-wafu.css?v=20261103c">
-    <link rel="stylesheet" href="css/visual-stationery.css?v=20261103c">
+    <link rel="stylesheet" href="css/visual-manga.css?v=20261103d">
+    <link rel="stylesheet" href="css/visual-wafu.css?v=20261103d">
+    <link rel="stylesheet" href="css/visual-stationery.css?v=20261103d">
     <!-- 增量层：消解分层，把各区块铺进同一张连续画布 -->
-    <link rel="stylesheet" href="css/visual-flow.css?v=20261103c">
+    <link rel="stylesheet" href="css/visual-flow.css?v=20261103d">
     <!-- 第四套：编辑排版·打破网格（须在通用层之后，自行接管编排） -->
-    <link rel="stylesheet" href="css/visual-editorial.css?v=20261103c">
+    <link rel="stylesheet" href="css/visual-editorial.css?v=20261103d">
     <!-- 第五套：扭蛋商店（塑料+金属材质，最后加载） -->
-    <link rel="stylesheet" href="css/visual-gacha.css?v=20261103c">
+    <link rel="stylesheet" href="css/visual-gacha.css?v=20261103d">
+    <link rel="stylesheet" href="css/visual-spine.css">
 </head>
 <body class="visual-manga">
 
@@ -53,8 +54,13 @@
                 <button type="button" class="visual-btn" data-visual="stationery" title="手帐文具风格">手帐</button>
                 <button type="button" class="visual-btn" data-visual="editorial" title="编辑排版·打破网格风格">杂志</button>
                 <button type="button" class="visual-btn" data-visual="gacha" title="扭蛋商店风格">扭蛋</button>
+                <button type="button" class="visual-btn" data-visual="spine" title="书脊长卷 · 结构排版风格">书脊</button>
             </div>
         </header>
+
+
+
+        <main class="main-content" id="mainContent">
 
         <!-- 主题 Banner 轮播（位于主导航上方） -->
         <section class="banner-carousel" id="bannerCarousel" aria-roledescription="carousel"
@@ -113,6 +119,15 @@
             <div class="banner-dots" id="bannerDots" role="tablist" aria-label="选择轮播图"></div>
             <div class="banner-hint">自动播放 · 悬停暂停</div>
         </section>
+            <section class="hero">
+                <div class="hero-inner">
+                    <p class="hero-tag">NEW · 2026 异世界焕新季</p>
+                    <h1 class="hero-title">探索 <span class="hero-highlight">异世界</span> 的无限可能</h1>
+                    <p class="hero-desc">三级菜单导航 · 一键换肤 · 响应式适配，幻想商品与二次元好物的前端工程演示。</p>
+                    <button id="heroBuyBtn" class="hero-cta">🔥 立即抢购</button>
+                </div>
+                <div class="hero-orb" aria-hidden="true"></div>
+            </section>
 
         <nav class="nav" aria-label="主导航">
             <button class="hamburger" aria-label="打开菜单" aria-expanded="false">
@@ -172,17 +187,6 @@
                 <li class="nav-item"><a href="#" class="nav-link" id="aboutLink">ℹ️ 关于我们</a></li>
             </ul>
         </nav>
-
-        <main class="main-content" id="mainContent">
-            <section class="hero">
-                <div class="hero-inner">
-                    <p class="hero-tag">NEW · 2026 异世界焕新季</p>
-                    <h1 class="hero-title">探索 <span class="hero-highlight">异世界</span> 的无限可能</h1>
-                    <p class="hero-desc">三级菜单导航 · 一键换肤 · 响应式适配，幻想商品与二次元好物的前端工程演示。</p>
-                    <button id="heroBuyBtn" class="hero-cta">🔥 立即抢购</button>
-                </div>
-                <div class="hero-orb" aria-hidden="true"></div>
-            </section>
 
             <!-- 图片走马灯（水平无缝滚动 · 支持换肤变量） -->
             <section class="carousel-section" aria-label="精选推荐">
@@ -484,9 +488,9 @@
         </div>
     </div>
 
-    <script src="js/mulModal.base.js?v=20261103c"></script>
-    <script src="js/banner-carousel.js?v=20261103c"></script>
-    <script src="js/main.js?v=20261103c" defer></script>
+    <script src="js/mulModal.base.js?v=20261103d"></script>
+    <script src="js/banner-carousel.js?v=20261103d"></script>
+    <script src="js/main.js?v=20261103d" defer></script>
 
 </body>
 </html>

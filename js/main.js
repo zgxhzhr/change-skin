@@ -179,7 +179,7 @@ class VisualSwitcher {
     constructor() {
         this.buttons = Array.from(document.querySelectorAll('.visual-btn'));
         this.body = document.body;
-        this.themes = ['manga', 'wafu', 'stationery', 'editorial', 'gacha'];
+        this.themes = ['manga', 'wafu', 'stationery', 'editorial', 'gacha', 'spine'];
         this.storageKey = 'shopmod-visual-style';
     }
 
