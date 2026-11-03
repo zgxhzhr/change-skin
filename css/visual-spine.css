@@ -1528,9 +1528,9 @@ body.visual-spine .visual-switch {
 }
 /* CTA 强制跟主题色走（此前被基础样式的渐变背景压住） */
 body.visual-spine .hero-cta {
-    background: var(--sp-ink) !important;
+    background: var(--sp-accent) !important;
     background-image: none !important;
-    border-color: var(--sp-ink) !important;
+    border-color: var(--sp-accent) !important;
     color: #fff !important;
 }
 body.visual-spine .hero-cta:hover {
