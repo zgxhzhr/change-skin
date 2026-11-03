@@ -746,13 +746,31 @@ body {
 
 .product-img {
     font-size: 64px;
-    margin: 8px 0 14px;
+    margin: 4px 0 14px;
     transition: transform 0.4s var(--ease-bounce);
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 二次元商品图：统一圆角 + 柔和投影，悬停时随卡片一起弹动 */
+.product-img img {
+    display: block;
+    width: 132px;
+    height: 132px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.35s var(--ease-out);
+}
+
+.product-item:hover .product-img img {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
 }
 
 .product-item:hover .product-img {
-    transform: scale(1.15) rotate(-4deg);
+    transform: scale(1.08) rotate(-3deg);
 }
 
 .product-name {
@@ -1019,6 +1037,12 @@ body.mobile-view .product-img {
     font-size: 48px;
 }
 
+body.mobile-view .product-img img {
+    width: 96px;
+    height: 96px;
+    border-radius: 14px;
+}
+
 body.mobile-view .product-price {
     font-size: 17px;
 }
@@ -1198,6 +1222,12 @@ body.mobile-view .product-price {
 
     .product-img {
         font-size: 48px;
+    }
+
+    .product-img img {
+        width: 104px;
+        height: 104px;
+        border-radius: 14px;
     }
 }
 
