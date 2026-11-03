@@ -159,6 +159,55 @@ class DebugToggle {
     }
 }
 
+/**
+ * 视觉风格切换：漫画分镜 / 和风浮世绘 / 手帐文具
+ * 只切换 body 上的 visual-* 类，不重建 DOM，不影响任何交互逻辑
+ */
+class VisualSwitcher {
+    constructor() {
+        this.buttons = Array.from(document.querySelectorAll('.visual-btn'));
+        this.body = document.body;
+        this.themes = ['manga', 'wafu', 'stationery'];
+        this.storageKey = 'shopmod-visual-style';
+    }
+
+    bindEvents() {
+        this.buttons.forEach(btn => {
+            btn.addEventListener('click', () => this.switch(btn.dataset.visual));
+        });
+
+        // 支持 ?visual=wafu 直接指定风格（便于分享/调试）
+        let fromUrl = null;
+        try { fromUrl = new URLSearchParams(location.search).get('visual'); } catch (e) { /* 忽略 */ }
+        if (fromUrl && this.themes.includes(fromUrl)) {
+            this.switch(fromUrl, true);
+            return;
+        }
+
+        // 恢复上次选择（默认漫画风）
+        let saved = null;
+        try { saved = localStorage.getItem(this.storageKey); } catch (e) { /* 隐私模式忽略 */ }
+        if (saved && this.themes.includes(saved)) this.switch(saved, true);
+    }
+
+    switch(name, silent) {
+        if (!this.themes.includes(name)) return;
+
+        this.themes.forEach(n => this.body.classList.remove('visual-' + n));
+        this.body.classList.add('visual-' + name);
+
+        this.buttons.forEach(b => {
+            const on = b.dataset.visual === name;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', String(on));
+        });
+
+        if (!silent) {
+            try { localStorage.setItem(this.storageKey, name); } catch (e) { /* 忽略 */ }
+        }
+    }
+}
+
 class ContentTabs {
     constructor() {
         this.tabs = document.querySelector('.content-tabs');
@@ -287,6 +336,7 @@ const init = () => {
         Navigation,
         Hamburger,
         DebugToggle,
+        VisualSwitcher,
         ContentTabs,
         ImageCarousel,
         BannerCarousel

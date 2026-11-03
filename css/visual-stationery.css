@@ -1,0 +1,495 @@
+/* ==========================================================================
+   风格 C · 手帐文具 (visual-stationery)
+   方格纸 + 纸胶带 + 便签 + 荧光笔标记 + 纸片柔影
+   作用域：body.visual-stationery
+   ========================================================================== */
+
+body.visual-stationery {
+    --st-paper: #fffdf7;
+    --st-grid: rgba(126, 174, 214, .30);
+    --st-ink: #3a3330;
+    --st-tape-pink: #ffc2dd;
+    --st-tape-blue: #bfe4ff;
+    --st-tape-yellow: #ffe9a8;
+    --st-marker: rgba(255, 214, 102, .75);
+    --st-accent: var(--theme-color);
+
+    --bg-page: var(--st-paper);
+    --bg-card: #ffffff;
+    --bg-subtle: #fff8e8;
+    --text-primary: var(--st-ink);
+    --text-secondary: #6b615c;
+    --text-muted: #a2968f;
+    --border: rgba(126, 174, 214, .55);
+    --price-color: var(--st-accent);
+
+    background-color: var(--st-paper);
+    background-image:
+        linear-gradient(var(--st-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--st-grid) 1px, transparent 1px),
+        linear-gradient(180deg, #fffef9, #fff9ec);
+    background-size: 26px 26px, 26px 26px, 100% 100%;
+    background-attachment: fixed;
+    color: var(--st-ink);
+}
+
+body.visual-stationery .bg-decor { display: none; }
+body.visual-stationery .container { position: relative; z-index: 1; }
+
+/* ---------- Header：贴纸卡片 ---------- */
+body.visual-stationery .header {
+    margin-top: 20px;
+    padding: 15px 22px;
+    background: #fff;
+    border: 1px solid rgba(126,174,214,.45);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px -16px rgba(120, 110, 90, .5), 0 2px 0 rgba(255,255,255,.9) inset;
+    position: relative;
+}
+body.visual-stationery .header::before {
+    /* 左上角纸胶带 */
+    content: "";
+    position: absolute;
+    left: 26px;
+    top: -11px;
+    width: 78px;
+    height: 22px;
+    background: repeating-linear-gradient(45deg, var(--st-tape-pink) 0 7px, #ffd8e9 7px 14px);
+    opacity: .9;
+    transform: rotate(-4deg);
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(160, 120, 140, .35);
+}
+
+body.visual-stationery .brand-name {
+    color: var(--st-ink);
+    font-weight: 800;
+    letter-spacing: .02em;
+    -webkit-text-fill-color: var(--st-ink);
+    background: none;
+    font-family: "Yuanti SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+body.visual-stationery .brand-accent {
+    background: linear-gradient(180deg, transparent 58%, var(--st-marker) 58%);
+    color: var(--st-ink);
+    -webkit-text-fill-color: var(--st-ink);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+body.visual-stationery .logo {
+    border: 3px solid #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px -6px rgba(160, 130, 150, .6);
+    transform: rotate(-3deg);
+}
+
+/* 主题 tab：便签贴纸 */
+body.visual-stationery .theme-tab {
+    border: 1px solid rgba(255, 200, 220, .9);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px -7px rgba(160, 130, 150, .7);
+    transition: transform .22s var(--ease-bounce), box-shadow .22s, background .22s;
+}
+body.visual-stationery .theme-tab:hover {
+    transform: translateY(-2px) rotate(-1.5deg);
+    box-shadow: 0 8px 18px -8px rgba(160, 130, 150, .75);
+}
+body.visual-stationery .theme-tab.active {
+    background: linear-gradient(180deg, #fff, #fff6fa);
+    border-color: var(--st-accent);
+    box-shadow: 0 0 0 2.5px rgba(255,255,255,.9), 0 8px 20px -9px var(--st-accent);
+    transform: rotate(-1deg);
+}
+body.visual-stationery .theme-tab .swatch {
+    border: 2px solid #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+}
+
+/* 风格切换：胶带条 */
+body.visual-stationery .visual-switch {
+    background: linear-gradient(180deg, #fff, #fff7fb);
+    border: 1px solid rgba(255, 200, 220, .95);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 3px;
+    box-shadow: 0 4px 12px -7px rgba(160, 130, 150, .6);
+}
+body.visual-stationery .visual-btn {
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--st-ink);
+    font-weight: 700;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background .22s, color .22s, transform .22s;
+}
+body.visual-stationery .visual-btn:hover { background: #fff0f7; transform: translateY(-1px); }
+body.visual-stationery .visual-btn.active {
+    background: var(--st-accent);
+    color: #fff;
+}
+
+/* ---------- Banner：拍立得/相纸 ---------- */
+body.visual-stationery .banner-carousel {
+    border: 8px solid #fff;
+    border-bottom-width: 26px;
+    border-radius: 6px;
+    box-shadow: 0 18px 40px -22px rgba(120, 100, 80, .65), 0 2px 0 rgba(0,0,0,.05);
+    overflow: hidden;
+    margin-top: 22px;
+    position: relative;
+}
+body.visual-stationery .banner-carousel::before,
+body.visual-stationery .banner-carousel::after {
+    content: "";
+    position: absolute;
+    top: -16px;
+    width: 92px;
+    height: 26px;
+    z-index: 5;
+    border-radius: 2px;
+    box-shadow: 0 3px 8px rgba(150, 120, 130, .4);
+}
+body.visual-stationery .banner-carousel::before {
+    left: 22px;
+    background: repeating-linear-gradient(45deg, var(--st-tape-blue) 0 8px, #d6f0ff 8px 16px);
+    transform: rotate(-5deg);
+}
+body.visual-stationery .banner-carousel::after {
+    right: 22px;
+    background: repeating-linear-gradient(-45deg, var(--st-tape-yellow) 0 8px, #fff3c9 8px 16px);
+    transform: rotate(4deg);
+}
+body.visual-stationery .banner-slide::after {
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.3) 42%, rgba(0,0,0,0) 72%),
+        linear-gradient(0deg, rgba(0,0,0,.3), transparent 55%);
+}
+body.visual-stationery .banner-tag {
+    background: rgba(255,255,255,.94);
+    color: var(--st-accent);
+    border-radius: 999px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(0,0,0,.22);
+}
+body.visual-stationery .banner-title {
+    font-weight: 900;
+    text-shadow: 0 2px 14px rgba(0,0,0,.55);
+}
+body.visual-stationery .banner-cta {
+    background: #fff;
+    color: var(--st-accent);
+    border: 2px dashed rgba(255,255,255,.95);
+    border-radius: 999px;
+    font-weight: 800;
+    box-shadow: 0 8px 20px -10px rgba(0,0,0,.5);
+    transition: transform .22s var(--ease-bounce), background .22s;
+}
+body.visual-stationery .banner-cta:hover { transform: translateY(-2px) scale(1.03); background: #fffdf7; }
+body.visual-stationery .banner-arrow {
+    background: rgba(255,255,255,.94);
+    border-radius: 50%;
+    box-shadow: 0 6px 16px rgba(0,0,0,.22);
+    transition: transform .22s var(--ease-bounce);
+}
+body.visual-stationery .banner-arrow:hover { transform: scale(1.12); }
+body.visual-stationery .banner-dots button {
+    background: rgba(255,255,255,.7);
+    border-radius: 999px;
+}
+body.visual-stationery .banner-dots .active { background: var(--st-accent); }
+body.visual-stationery .banner-hint {
+    background: rgba(255,255,255,.94);
+    border-radius: 999px;
+    color: var(--st-ink);
+    box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+
+/* ---------- 主导航：便签条 ---------- */
+body.visual-stationery .nav {
+    margin-top: 22px;
+    background: #fff;
+    border: 1px solid rgba(126,174,214,.4);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px -18px rgba(120,110,90,.55);
+}
+body.visual-stationery .nav-link {
+    border-radius: 999px;
+    color: var(--st-ink);
+    font-weight: 700;
+    transition: background .22s, color .22s, transform .22s;
+}
+body.visual-stationery .nav-link:hover,
+body.visual-stationery .nav-link.active {
+    background: linear-gradient(180deg, transparent 55%, var(--st-marker) 55%);
+    transform: translateY(-1px);
+}
+body.visual-stationery .nav-link::after { display: none; }
+
+body.visual-stationery .submenu {
+    background: #fff;
+    border: 1px solid rgba(126,174,214,.45);
+    border-radius: 12px;
+    box-shadow: 0 16px 34px -20px rgba(120,110,90,.6);
+    overflow: hidden;
+}
+body.visual-stationery .submenu a { font-weight: 600; }
+body.visual-stationery .submenu a:hover {
+    background: linear-gradient(180deg, transparent 55%, var(--st-marker) 55%);
+    color: var(--st-ink);
+}
+
+/* ---------- Hero：便利贴大卡 ---------- */
+body.visual-stationery .hero {
+    background:
+        repeating-linear-gradient(180deg, transparent 0 30px, rgba(126,174,214,.18) 30px 31px),
+        linear-gradient(135deg, #fffdf7, #fff4e0);
+    border: 1px solid rgba(255, 210, 170, .9);
+    border-radius: 16px;
+    box-shadow: 0 20px 44px -30px rgba(150, 120, 90, .8), 0 1px 0 rgba(255,255,255,.9) inset;
+    overflow: hidden;
+    color: var(--st-ink);
+    transform: rotate(-.35deg);
+}
+body.visual-stationery .hero::before {
+    /* 右上角胶带 */
+    content: "";
+    position: absolute;
+    right: 34px;
+    top: -12px;
+    width: 108px;
+    height: 26px;
+    background: repeating-linear-gradient(45deg, var(--st-tape-pink) 0 8px, #ffe0ee 8px 16px);
+    opacity: .92;
+    transform: rotate(6deg);
+    border-radius: 2px;
+    box-shadow: 0 3px 8px rgba(160,120,140,.35);
+}
+body.visual-stationery .hero-inner { position: relative; z-index: 1; }
+body.visual-stationery .hero-tag {
+    background: #fff;
+    color: var(--st-accent);
+    border: 1.5px dashed rgba(255, 190, 220, .95);
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+body.visual-stationery .hero-title {
+    color: var(--st-ink);
+    font-weight: 900;
+    letter-spacing: -.01em;
+    text-shadow: 0 1px 0 #fff;
+}
+body.visual-stationery .hero-highlight {
+    color: var(--st-ink);
+    -webkit-text-fill-color: var(--st-ink);
+    background: linear-gradient(180deg, transparent 56%, var(--st-marker) 56%);
+    padding: 0 3px;
+    border-radius: 3px;
+}
+body.visual-stationery .hero-desc { color: var(--st-ink); opacity: .78; }
+body.visual-stationery .hero-cta {
+    background: var(--st-accent);
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    font-weight: 800;
+    box-shadow: 0 12px 26px -12px var(--st-accent);
+    transition: transform .22s var(--ease-bounce);
+}
+body.visual-stationery .hero-cta:hover { transform: translateY(-2px) rotate(-1deg); }
+body.visual-stationery .hero-orb {
+    background: radial-gradient(circle, rgba(255, 214, 102, .5), transparent 68%);
+}
+
+/* ---------- 走马灯 ---------- */
+body.visual-stationery .carousel-section {
+    background: rgba(255,255,255,.9);
+    border: 1px solid rgba(126,174,214,.4);
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: 0 10px 26px -18px rgba(120,110,90,.5);
+}
+body.visual-stationery .carousel-title {
+    color: var(--st-ink);
+    font-weight: 800;
+    background: linear-gradient(180deg, transparent 56%, var(--st-marker) 56%);
+    padding: 0 4px;
+}
+body.visual-stationery #carouselList > li img {
+    border: 3px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px -10px rgba(150, 120, 130, .6);
+    transition: transform .26s var(--ease-bounce), box-shadow .26s;
+}
+body.visual-stationery #carouselList > li img:hover {
+    transform: translateY(-7px) rotate(-2deg);
+    box-shadow: 0 16px 32px -12px rgba(150, 120, 130, .7);
+}
+
+/* ---------- 内容标签：贴纸 ---------- */
+body.visual-stationery .content-tabs {
+    background: rgba(255,255,255,.85);
+    border: 1px solid rgba(126,174,214,.4);
+    border-radius: 999px;
+    padding: 5px;
+    gap: 5px;
+}
+body.visual-stationery .content-tab {
+    border-radius: 999px;
+    color: var(--st-ink);
+    font-weight: 700;
+    transition: background .22s, color .22s, transform .22s;
+}
+body.visual-stationery .content-tab:hover { background: #fff4fa; transform: translateY(-1px); }
+body.visual-stationery .content-tab.active {
+    background: var(--st-accent);
+    color: #fff;
+    box-shadow: 0 8px 18px -9px var(--st-accent);
+}
+
+/* ---------- 商品卡：白纸贴纸 ---------- */
+body.visual-stationery .product-item {
+    background: #fff;
+    border: 1px solid rgba(126,174,214,.35);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px -16px rgba(120,110,90,.55);
+    transition: transform .28s var(--ease-bounce), box-shadow .28s, border-color .28s;
+    overflow: visible;
+}
+body.visual-stationery .product-item::before {
+    /* 顶部纸胶带（每张随机色相，用 nth-of-type 区分） */
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -9px;
+    width: 62px;
+    height: 18px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: repeating-linear-gradient(45deg, var(--st-tape-pink) 0 6px, #ffe0ee 6px 12px);
+    opacity: .92;
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(160,120,140,.3);
+    z-index: 2;
+}
+body.visual-stationery .product-item:nth-child(3n+2)::before {
+    background: repeating-linear-gradient(45deg, var(--st-tape-blue) 0 6px, #dff1ff 6px 12px);
+    transform: translateX(-50%) rotate(2.5deg);
+}
+body.visual-stationery .product-item:nth-child(3n+3)::before {
+    background: repeating-linear-gradient(45deg, var(--st-tape-yellow) 0 6px, #fff3c9 6px 12px);
+    transform: translateX(-50%) rotate(-1.5deg);
+}
+body.visual-stationery .product-item::after { display: none; }
+body.visual-stationery .product-item:hover {
+    transform: translateY(-8px) rotate(-.8deg);
+    border-color: rgba(255, 190, 220, .95);
+    box-shadow: 0 22px 40px -20px rgba(150, 120, 140, .7);
+}
+body.visual-stationery .product-img img {
+    border-radius: 12px;
+    border: 2px solid #fff;
+    box-shadow: 0 8px 20px -12px rgba(150, 120, 130, .6);
+    transition: transform .28s var(--ease-bounce);
+}
+body.visual-stationery .product-item:hover .product-img img { transform: scale(1.05) rotate(1deg); }
+body.visual-stationery .product-name {
+    color: var(--st-ink);
+    font-weight: 800;
+}
+body.visual-stationery .product-item:hover .product-name {
+    background: linear-gradient(180deg, transparent 60%, var(--st-marker) 60%);
+}
+body.visual-stationery .product-price data {
+    background: none;
+    -webkit-text-fill-color: var(--st-accent);
+    color: var(--st-accent);
+}
+body.visual-stationery .product-badge,
+body.visual-stationery .rank-badge {
+    background: #fff;
+    color: var(--st-ink);
+    border: 1.5px solid rgba(255, 190, 220, .95);
+    border-radius: 999px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px -6px rgba(160, 120, 140, .6);
+}
+body.visual-stationery .product-badge.hot { background: #ffe9ef; }
+body.visual-stationery .product-badge.new { background: #e6f7ff; }
+body.visual-stationery .product-badge.sale { background: #fff6d9; }
+
+/* ---------- 页脚 / 弹窗 ---------- */
+body.visual-stationery .footer {
+    background: linear-gradient(135deg, #fffdf7, #fff2e4);
+    border-top: 2px dashed rgba(255, 190, 220, .9);
+}
+body.visual-stationery .footer small { color: var(--st-ink); opacity: .8; }
+
+body.visual-stationery .modal {
+    background: #fffdf7;
+    border: 2px solid #fff;
+    border-radius: 18px;
+    box-shadow: 0 26px 60px -30px rgba(120, 100, 80, .8);
+}
+body.visual-stationery .modal-head { border-bottom: 2px dashed rgba(255, 190, 220, .9); }
+body.visual-stationery .modal-title {
+    background: none;
+    -webkit-text-fill-color: var(--st-ink);
+    color: var(--st-ink);
+    font-weight: 800;
+}
+body.visual-stationery .btn-confirm {
+    background: var(--st-accent);
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    font-weight: 800;
+}
+body.visual-stationery .btn-cancel {
+    background: #fff;
+    color: var(--st-ink);
+    border: 1.5px solid rgba(255, 190, 220, .95);
+    border-radius: 999px;
+    font-weight: 700;
+}
+body.visual-stationery .modal-mask { background: rgba(120, 105, 95, .38); }
+body.visual-stationery #debugToggle {
+    background: var(--st-accent);
+    border: 3px solid #fff;
+    border-radius: 14px;
+    color: #fff;
+    box-shadow: 0 10px 24px -10px var(--st-accent);
+    transform: rotate(-3deg);
+}
+
+body.visual-stationery ::-webkit-scrollbar { width: 11px; }
+body.visual-stationery ::-webkit-scrollbar-track { background: #fff8ec; }
+body.visual-stationery ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--st-tape-pink), #ffd6e8);
+    border: 2px solid #fff;
+    border-radius: 999px;
+}
+body.visual-stationery ::selection { background: var(--st-marker); color: var(--st-ink); }
+
+/* ---------- 通用修正：banner 箭头避让标题 ---------- */
+body.visual-stationery .banner-arrow {
+    width: 38px;
+    height: 38px;
+    opacity: .82;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+body.visual-stationery .banner-arrow.banner-prev { left: 12px; right: auto; }
+body.visual-stationery .banner-arrow.banner-next { right: 12px; left: auto; }
+body.visual-stationery .banner-arrow:hover { opacity: 1; }
+body.visual-stationery .banner-copy {
+    left: 74px;
+    max-width: 54%;
+}

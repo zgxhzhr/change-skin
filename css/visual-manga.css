@@ -1,0 +1,440 @@
+/* ==========================================================================
+   风格 A · 漫画分镜 (visual-manga)
+   网点纸背景 + 粗黑描边 + 硬边投影 + 速度线
+   作用域：body.visual-manga —— 三套风格可共存，由 body class 切换
+   ========================================================================== */
+
+body.visual-manga {
+    --mg-ink: #16110f;
+    --mg-paper: #fdfbf6;
+    --mg-dot: rgba(22, 17, 15, .17);
+    --mg-accent: var(--theme-color);
+
+    --bg-page: var(--mg-paper);
+    --bg-card: #ffffff;
+    --bg-subtle: #f6f2ea;
+    --text-primary: var(--mg-ink);
+    --text-secondary: #4a4240;
+    --text-muted: #857c78;
+    --border: var(--mg-ink);
+    --price-color: var(--mg-accent);
+
+    background-color: var(--mg-paper);
+    background-image:
+        radial-gradient(circle, var(--mg-dot) 1.05px, transparent 1.15px),
+        linear-gradient(180deg, rgba(255,255,255,.6), rgba(250,246,238,.9));
+    background-size: 9px 9px, 100% 100%;
+    background-attachment: fixed;
+    color: var(--mg-ink);
+}
+
+/* 网点纸纹理再叠一层大点，制造漫画网屏层次 */
+body.visual-manga::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(22,17,15,.10) 2px, transparent 2.2px);
+    background-size: 26px 26px;
+    opacity: .6;
+    mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 72%);
+}
+
+body.visual-manga .container { position: relative; z-index: 1; }
+body.visual-manga .bg-decor { display: none; }
+
+/* ---------- Header：白纸 + 粗黑框 ---------- */
+body.visual-manga .header {
+    margin-top: 16px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 7px 7px 0 var(--mg-ink);
+}
+
+body.visual-manga .brand-name {
+    color: var(--mg-ink);
+    font-weight: 900;
+    letter-spacing: .02em;
+    -webkit-text-fill-color: var(--mg-ink);
+    text-shadow: 2.5px 2.5px 0 rgba(255, 255, 255, 0),
+                 2.5px 2.5px 0 var(--mg-accent);
+}
+
+body.visual-manga .brand-accent {
+    color: var(--mg-accent);
+    -webkit-text-fill-color: var(--mg-accent);
+    background: none;
+}
+
+body.visual-manga .logo {
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+}
+
+/* 主题色 tab：黑白框 + 激活时填色 */
+body.visual-manga .theme-tab {
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 2.5px 2.5px 0 var(--mg-ink);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+body.visual-manga .theme-tab:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3.5px 3.5px 0 var(--mg-ink);
+}
+body.visual-manga .theme-tab.active {
+    background: var(--mg-accent);
+    color: #fff;
+    box-shadow: 2.5px 2.5px 0 var(--mg-ink);
+}
+body.visual-manga .theme-tab.active .label { color: #fff; }
+body.visual-manga .theme-tab .swatch {
+    border: 2px solid var(--mg-ink);
+    border-radius: 3px;
+}
+
+/* 风格切换按钮（漫画风：黑框胶囊） */
+body.visual-manga .visual-switch {
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+    padding: 3px;
+    gap: 3px;
+}
+body.visual-manga .visual-btn {
+    border: none;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--mg-ink);
+    font-weight: 800;
+    padding: 5px 11px;
+    cursor: pointer;
+    transition: background .16s, color .16s;
+}
+body.visual-manga .visual-btn:hover { background: #f0ebe0; }
+body.visual-manga .visual-btn.active {
+    background: var(--mg-accent);
+    color: #fff;
+}
+
+/* ---------- Banner：粗黑边框 + 速度线 ---------- */
+body.visual-manga .banner-carousel {
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 8px 8px 0 var(--mg-ink);
+    overflow: hidden;
+    margin-top: 16px;
+}
+body.visual-manga .banner-slide::after {
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.38) 42%, rgba(0,0,0,0) 72%),
+        repeating-linear-gradient(105deg,
+            rgba(255,255,255,.16) 0 2px,
+            transparent 2px 13px);
+}
+body.visual-manga .banner-tag {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 3px;
+    box-shadow: 2.5px 2.5px 0 var(--mg-ink);
+    font-weight: 900;
+}
+body.visual-manga .banner-title {
+    font-weight: 900;
+    letter-spacing: -.02em;
+    text-shadow: 3px 3px 0 rgba(0,0,0,.55);
+}
+body.visual-manga .banner-cta {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--mg-ink);
+    font-weight: 900;
+    transition: transform .16s, box-shadow .16s;
+}
+body.visual-manga .banner-cta:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--mg-ink);
+    background: var(--mg-accent);
+    color: #fff;
+}
+body.visual-manga .banner-arrow {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    color: var(--mg-ink);
+    box-shadow: 3px 3px 0 var(--mg-ink);
+}
+body.visual-manga .banner-dots button {
+    border: 2px solid var(--mg-ink);
+    background: #fff;
+    border-radius: 2px;
+}
+body.visual-manga .banner-dots .active { background: var(--mg-accent); }
+body.visual-manga .banner-hint {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 2px solid var(--mg-ink);
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+/* ---------- 主导航：白纸标签 ---------- */
+body.visual-manga .nav {
+    margin-top: 16px;
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 7px 7px 0 var(--mg-ink);
+}
+body.visual-manga .nav-link {
+    border-radius: 3px;
+    font-weight: 800;
+    color: var(--mg-ink);
+}
+body.visual-manga .nav-link:hover,
+body.visual-manga .nav-link.active {
+    background: var(--mg-accent);
+    color: #fff;
+}
+body.visual-manga .nav-link::after { display: none; }
+
+body.visual-manga .submenu {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 5px 5px 0 var(--mg-ink);
+}
+body.visual-manga .submenu a { font-weight: 700; color: var(--mg-ink); }
+body.visual-manga .submenu a:hover { background: var(--mg-accent); color: #fff; }
+
+/* ---------- Hero：漫画大标题格 ---------- */
+body.visual-manga .hero {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 8px 8px 0 var(--mg-ink);
+    overflow: hidden;
+}
+body.visual-manga .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle, rgba(22,17,15,.13) 1.4px, transparent 1.6px) 0 0/12px 12px,
+        linear-gradient(115deg, transparent 55%, var(--mg-accent) 55%, var(--mg-accent) 78%, transparent 78%);
+    opacity: .5;
+    pointer-events: none;
+}
+body.visual-manga .hero-inner { position: relative; z-index: 1; }
+body.visual-manga .hero-tag {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 3px;
+    font-weight: 900;
+    box-shadow: 2.5px 2.5px 0 var(--mg-ink);
+}
+body.visual-manga .hero-title {
+    color: var(--mg-ink);
+    font-weight: 900;
+    letter-spacing: -.03em;
+    text-shadow: 4px 4px 0 var(--mg-accent);
+}
+body.visual-manga .hero-highlight {
+    color: var(--mg-accent);
+    -webkit-text-fill-color: var(--mg-accent);
+    background: none;
+    text-shadow: 4px 4px 0 var(--mg-ink);
+}
+body.visual-manga .hero-desc { color: var(--text-secondary); font-weight: 600; }
+body.visual-manga .hero-cta {
+    background: var(--mg-ink);
+    color: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 5px 5px 0 var(--mg-accent);
+    font-weight: 900;
+    transition: transform .16s, box-shadow .16s;
+}
+body.visual-manga .hero-cta:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--mg-accent);
+}
+body.visual-manga .hero-orb { display: none; }
+
+/* ---------- 走马灯：漫画格 ---------- */
+body.visual-manga .carousel-section {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 7px 7px 0 var(--mg-ink);
+    padding: 16px 20px;
+}
+body.visual-manga .carousel-title {
+    color: var(--mg-ink);
+    font-weight: 900;
+    text-shadow: 2.5px 2.5px 0 var(--mg-accent);
+}
+body.visual-manga #carouselList > li img {
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--mg-ink);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+body.visual-manga #carouselList > li img:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--mg-accent);
+}
+
+/* ---------- 内容标签：漫画按钮 ---------- */
+body.visual-manga .content-tabs {
+    background: transparent;
+    border: none;
+    gap: 8px;
+    padding: 0;
+}
+body.visual-manga .content-tab {
+    background: #fff;
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+    font-weight: 800;
+    color: var(--mg-ink);
+    transition: transform .16s, box-shadow .16s, background .16s;
+}
+body.visual-manga .content-tab:hover { transform: translate(-1px, -1px); box-shadow: 4.5px 4.5px 0 var(--mg-ink); }
+body.visual-manga .content-tab.active {
+    background: var(--mg-accent);
+    color: #fff;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+}
+
+/* ---------- 商品卡：漫画分镜格 ---------- */
+body.visual-manga .product-item {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 6px 6px 0 var(--mg-ink);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+body.visual-manga .product-item::after { display: none; }
+body.visual-manga .product-item:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0 var(--mg-accent), 10px 10px 0 3px var(--mg-ink);
+}
+body.visual-manga .product-img img {
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+}
+body.visual-manga .product-item:hover .product-img img {
+    transform: scale(1.04);
+}
+body.visual-manga .product-name {
+    font-weight: 900;
+    color: var(--mg-ink);
+}
+body.visual-manga .product-item:hover .product-name { color: var(--mg-accent); }
+body.visual-manga .product-price data {
+    background: none;
+    -webkit-text-fill-color: var(--mg-accent);
+    color: var(--mg-accent);
+    font-weight: 900;
+}
+body.visual-manga .product-badge,
+body.visual-manga .rank-badge {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 3px;
+    box-shadow: 2.5px 2.5px 0 var(--mg-ink);
+    font-weight: 900;
+}
+body.visual-manga .product-badge.hot { background: #ffe1e1; }
+body.visual-manga .product-badge.new { background: #e2ffe8; }
+body.visual-manga .product-badge.sale { background: #fff1d6; }
+
+/* ---------- 页脚 / 弹窗 ---------- */
+body.visual-manga .footer {
+    background: var(--mg-ink);
+    border-radius: 0;
+    border-top: 3px solid var(--mg-ink);
+}
+body.visual-manga .footer small { color: #fff; font-weight: 700; }
+
+body.visual-manga .modal {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 6px;
+    box-shadow: 8px 8px 0 var(--mg-ink);
+}
+body.visual-manga .modal-head { border-bottom: 3px solid var(--mg-ink); }
+body.visual-manga .modal-title {
+    background: none;
+    -webkit-text-fill-color: var(--mg-ink);
+    color: var(--mg-ink);
+    font-weight: 900;
+}
+body.visual-manga .btn-confirm {
+    background: var(--mg-accent);
+    color: #fff;
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+    font-weight: 900;
+}
+body.visual-manga .btn-cancel {
+    background: #fff;
+    color: var(--mg-ink);
+    border: 2.5px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--mg-ink);
+    font-weight: 800;
+}
+body.visual-manga .modal-mask { background: rgba(20, 16, 14, .55); }
+body.visual-manga #debugToggle {
+    background: #fff;
+    border: 3px solid var(--mg-ink);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--mg-ink);
+    color: var(--mg-ink);
+}
+
+/* 滚动条 */
+body.visual-manga ::-webkit-scrollbar { width: 12px; }
+body.visual-manga ::-webkit-scrollbar-track { background: var(--mg-paper); border-left: 2px solid var(--mg-ink); }
+body.visual-manga ::-webkit-scrollbar-thumb {
+    background: var(--mg-accent);
+    border: 2px solid var(--mg-ink);
+    border-radius: 2px;
+}
+body.visual-manga ::selection { background: var(--mg-accent); color: #fff; }
+
+/* ---------- 通用修正：banner 箭头避让标题 ---------- */
+body.visual-manga .banner-arrow {
+    width: 38px;
+    height: 38px;
+    opacity: .82;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+body.visual-manga .banner-arrow.banner-prev { left: 12px; right: auto; }
+body.visual-manga .banner-arrow.banner-next { right: 12px; left: auto; }
+body.visual-manga .banner-arrow:hover { opacity: 1; }
+body.visual-manga .banner-copy {
+    left: 74px;
+    max-width: 54%;
+}

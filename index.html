@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/banner.css">
+    <!-- 三套并行视觉风格（通过 body.visual-* 切换，互不干扰） -->
+    <link rel="stylesheet" href="css/visual-manga.css">
+    <link rel="stylesheet" href="css/visual-wafu.css">
+    <link rel="stylesheet" href="css/visual-stationery.css">
 </head>
-<body>
+<body class="visual-manga">
 
     <div class="bg-decor">
         <span class="blob blob-1"></span>
@@ -33,6 +37,12 @@
                     <li class="theme-tab active" data-theme="purple" data-logo="purple.webp" title="紫色主题" role="tab" aria-selected="true"><span class="swatch purple" aria-hidden="true"></span><span class="label">紫晶</span></li>
                 </ul>
             </nav>
+            <!-- 视觉风格切换（漫画 / 和风 / 手帐） -->
+            <div class="visual-switch" role="group" aria-label="视觉风格切换">
+                <button type="button" class="visual-btn active" data-visual="manga" title="漫画分镜风格">漫画</button>
+                <button type="button" class="visual-btn" data-visual="wafu" title="和风浮世绘风格">和风</button>
+                <button type="button" class="visual-btn" data-visual="stationery" title="手帐文具风格">手帐</button>
+            </div>
         </header>
 
         <!-- 主题 Banner 轮播（位于主导航上方） -->
