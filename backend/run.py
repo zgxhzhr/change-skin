@@ -18,12 +18,20 @@ import socket
 import sys
 from pathlib import Path
 
+# Windows 控制台默认 GBK，输出 ✓ / ✗ 这类符号会抛 UnicodeEncodeError 直接崩掉。
+# 这里强制切成 UTF-8；失败的终端（如重定向到文件）也能兜住。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
+
 BASE = Path(__file__).resolve().parent
 sys.path.insert(0, str(BASE))
 
 
 def fail(msg: str) -> None:
-    print(f"\n[✗] {msg}\n", file=sys.stderr)
+    print(f"\n[X] {msg}\n", file=sys.stderr)
     sys.exit(1)
 
 
@@ -39,7 +47,7 @@ def check_deps() -> None:
             "缺少依赖：" + ", ".join(missing) + "\n"
             "    安装：python -m pip install " + " ".join(missing)
         )
-    print("[✓] 依赖齐全")
+    print("[OK] 依赖齐全")
 
 
 def check_db() -> None:
@@ -53,7 +61,7 @@ def check_db() -> None:
             f"/{os.getenv('CS_DB_NAME', 'change_skin')}\n"
             "    检查 MySQL 是否在跑：Get-NetTCPConnection -LocalPort 3306 -State Listen"
         )
-    print(f"[✓] 数据库连接正常（MySQL {row['v'] if row else '?'}）")
+    print(f"[OK] 数据库连接正常（MySQL {row['v'] if row else '?'}）")
 
     try:
         import db as _db
@@ -64,7 +72,7 @@ def check_db() -> None:
             f"表结构不完整：{exc}\n"
             "    初始化：mysql -u root -p change_skin < schema.sql"
         )
-    print(f"[✓] 表结构就绪（{len(tables)} 张表，{n['n']} 个商品）")
+    print(f"[OK] 表结构就绪（{len(tables)} 张表，{n['n']} 个商品）")
 
 
 def check_port(host: str, port: int) -> None:
@@ -77,7 +85,7 @@ def check_port(host: str, port: int) -> None:
                 f"    或先停掉占用进程：Get-NetTCPConnection -LocalPort {port} | "
                 "Select-Object OwningProcess"
             )
-    print(f"[✓] 端口 {port} 可用")
+    print(f"[OK] 端口 {port} 可用")
 
 
 def banner(host: str, port: int, mail_mode: str) -> None:

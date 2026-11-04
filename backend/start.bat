@@ -9,6 +9,8 @@ echo   正在启动异世界商城后端
 echo ============================================
 echo.
 
+set PYTHONIOENCODING=utf-8
+
 where python >nul 2>nul
 if errorlevel 1 (
     echo [X] 找不到 python，请先安装 Python 3.10+ 并加入 PATH
