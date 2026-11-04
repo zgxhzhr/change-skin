@@ -1678,3 +1678,62 @@ body.visual-spine .header::after {
     font-size: 9px;
     letter-spacing: .4em;
 }
+/* ==========================================================================
+   书脊内账户区最终修正
+   style.css 里为了「横排 header 时账户区靠右」加了 .user-area{margin-left:auto}，
+   在书脊的 flex column 里它会把整块推到右边缘、超出部分被 header 的
+   overflow:auto 裁掉。这里用 !important 压死，确保填满书脊内容宽度。
+   ========================================================================== */
+body.visual-spine .header .user-area {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    align-self: stretch !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+body.visual-spine .header .user-name,
+body.visual-spine .header .user-link,
+body.visual-spine .header .user-entry,
+body.visual-spine .header .user-logout {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* 书脊文字对比度最终修正：去掉 opacity 折扣，直接用最深墨色 */
+body.visual-spine .header .theme-tab .label {
+    color: var(--sp-ink) !important;
+    opacity: 1 !important;
+}
+
+body.visual-spine .header .visual-btn {
+    color: var(--sp-ink) !important;
+    opacity: 1 !important;
+}
+
+body.visual-spine .header .theme-tab.active .label,
+body.visual-spine .header .visual-btn.active {
+    color: var(--sp-accent) !important;
+    opacity: 1 !important;
+}
+
+body.visual-spine .header .user-name {
+    color: var(--sp-ink) !important;
+    opacity: 1 !important;
+}
+
+body.visual-spine .header .user-link,
+body.visual-spine .header .user-entry {
+    color: var(--sp-ink) !important;
+    opacity: 1 !important;
+}
+
+body.visual-spine .header .user-logout {
+    color: var(--sp-ink-soft) !important;
+    opacity: 1 !important;
+}
