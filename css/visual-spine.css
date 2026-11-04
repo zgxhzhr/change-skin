@@ -99,7 +99,7 @@ body.visual-spine .header {
     max-height: 100dvh;
     overflow: auto;
     margin: 0;
-    padding: 38px 74px 30px 26px;
+    padding: 34px 24px 26px 24px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -1633,4 +1633,48 @@ body.visual-spine .user-logout {
 /* 书脊 header 是浅纸底，文字用墨色 */
 body.visual-spine .header {
     color: var(--sp-ink);
+}
+
+/* 书脊内账户区：占满内容宽度，文字超长就截断，绝不能撑出书脊 */
+body.visual-spine .user-area {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+body.visual-spine .user-name {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.visual-spine .user-link,
+body.visual-spine .user-entry,
+body.visual-spine .user-logout {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    padding-left: 12px;
+    padding-right: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 竖排刊名收回到 padding 区内，不再压到内容栏 */
+body.visual-spine .header::after {
+    right: 4px;
+    font-size: 9px;
+    letter-spacing: .4em;
 }
