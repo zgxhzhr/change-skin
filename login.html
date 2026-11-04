@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 · 异世界商城</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/visual-spine.css">
+  <link rel="stylesheet" href="css/auth.css?v=1">
+</head>
+<body class="visual-spine auth-page">
+
+  <a class="skip-link" href="#authMain">跳到登录表单</a>
+
+  <div class="container">
+    <!-- 书脊：与商城完全同一套结构 -->
+    <header class="header">
+      <div class="brand">
+        <img src="img/red.webp" alt="" class="logo" width="52" height="52">
+        <span class="brand-name">异世<span class="brand-accent">界</span></span>
+      </div>
+
+      <nav aria-label="主题切换">
+        <ul class="theme-tabs" role="tablist">
+          <li>
+            <button class="theme-tab" data-theme="red" data-logo="red" type="button" role="tab" aria-selected="false">
+              <span class="swatch" style="background:#ff0000"></span><span class="label">炽热红</span>
+            </button>
+          </li>
+          <li>
+            <button class="theme-tab" data-theme="green" data-logo="green" type="button" role="tab" aria-selected="false">
+              <span class="swatch" style="background:#00c800"></span><span class="label">森绿</span>
+            </button>
+          </li>
+          <li>
+            <button class="theme-tab" data-theme="blue" data-logo="blue" type="button" role="tab" aria-selected="false">
+              <span class="swatch" style="background:#0040ff"></span><span class="label">深空蓝</span>
+            </button>
+          </li>
+          <li>
+            <button class="theme-tab" data-theme="orange" data-logo="orange" type="button" role="tab" aria-selected="false">
+              <span class="swatch" style="background:#ff6f00"></span><span class="label">活力橙</span>
+            </button>
+          </li>
+          <li>
+            <button class="theme-tab active" data-theme="purple" data-logo="purple" type="button" role="tab" aria-selected="true">
+              <span class="swatch" style="background:#7A0080"></span><span class="label">紫晶</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="auth-spine-links">
+        <a href="index.html" class="auth-back">← 返回商城</a>
+      </div>
+    </header>
+
+    <main class="main-content" id="authMain">
+      <section class="auth-shell">
+
+        <div class="auth-lede">
+          <p class="auth-kicker">ACCOUNT · 异世界通行证</p>
+          <h1 class="auth-title">
+            登录你的<span class="auth-em">账户</span>
+          </h1>
+          <p class="auth-sub">
+            登录后，你的配色主题与视觉风格会跟着账号走——
+            换一台设备打开，还是同一间店。
+          </p>
+          <ul class="auth-points">
+            <li>主题与风格偏好云端同步</li>
+            <li>下单与订单历史</li>
+            <li>收藏与浏览记录</li>
+          </ul>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-tabs" role="tablist" aria-label="登录或注册">
+            <button class="auth-tab active" id="tabLogin" role="tab" aria-selected="true" type="button">登录</button>
+            <button class="auth-tab" id="tabRegister" role="tab" aria-selected="false" type="button">注册</button>
+          </div>
+
+          <!-- 登录 -->
+          <form class="auth-form" id="loginForm" novalidate>
+            <label class="field">
+              <span class="field-label">邮箱或用户名</span>
+              <input type="text" id="loginAccount" name="account" autocomplete="username"
+                     required maxlength="190" spellcheck="false">
+            </label>
+
+            <label class="field">
+              <span class="field-label">密码</span>
+              <input type="password" id="loginPassword" name="password" autocomplete="current-password"
+                     required maxlength="128">
+            </label>
+
+            <div class="auth-row">
+              <label class="check">
+                <input type="checkbox" id="rememberMe" checked>
+                <span>记住我</span>
+              </label>
+              <a href="#" class="auth-link" id="forgotLink">忘记密码？</a>
+            </div>
+
+            <p class="auth-error" id="loginError" role="alert" aria-live="polite"></p>
+
+            <button type="submit" class="auth-submit" id="loginSubmit">
+              <span class="auth-submit-label">进入商城</span>
+            </button>
+          </form>
+
+          <!-- 注册 -->
+          <form class="auth-form" id="registerForm" novalidate hidden>
+            <label class="field">
+              <span class="field-label">邮箱</span>
+              <input type="email" id="regEmail" name="email" autocomplete="email"
+                     required maxlength="190" spellcheck="false">
+            </label>
+
+            <label class="field">
+              <span class="field-label">用户名</span>
+              <input type="text" id="regUsername" name="username" autocomplete="nickname"
+                     required maxlength="50" spellcheck="false">
+            </label>
+
+            <label class="field">
+              <span class="field-label">密码</span>
+              <input type="password" id="regPassword" name="password" autocomplete="new-password"
+                     required maxlength="128">
+              <span class="field-hint">至少 8 位，需含字母与数字</span>
+            </label>
+
+            <p class="auth-error" id="registerError" role="alert" aria-live="polite"></p>
+
+            <button type="submit" class="auth-submit" id="registerSubmit">
+              <span class="auth-submit-label">创建账户</span>
+            </button>
+          </form>
+
+          <p class="auth-foot">
+            后端地址 <code id="apiBaseLabel">http://127.0.0.1:8000</code>
+          </p>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="js/mulModal.base.js" defer></script>
+  <script src="js/auth.js?v=1" defer></script>
+</body>
+</html>

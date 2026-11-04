@@ -1,0 +1,388 @@
+/* ==========================================================================
+   登录页 · 书脊长卷风格
+   复用 visual-spine.css 的书脊骨架（左侧 sticky 栏 + 右侧内容栏），
+   这里只补登录表单自己的排版。纸、墨、细线、主题色，不用圆角卡片那套。
+   作用域：body.auth-page
+   ========================================================================== */
+
+body.auth-page {
+    min-height: 100vh;
+    overflow-x: clip;
+}
+
+/* 书脊内的返回链接 */
+body.auth-page .auth-spine-links {
+    margin-top: auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--sp-rule);
+    width: 100%;
+}
+
+body.auth-page .auth-back {
+    display: inline-block;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .16em;
+    color: var(--sp-ink-soft);
+    text-decoration: none;
+    transition: color .2s ease, letter-spacing .2s ease;
+    min-height: 44px;
+    line-height: 44px;
+}
+
+body.auth-page .auth-back:hover {
+    color: var(--sp-accent);
+    letter-spacing: .22em;
+}
+
+/* 登录页的主区：lede + 表单，两栏 */
+body.auth-page .main-content {
+    grid-column: 2;
+    display: block;
+    min-height: 100vh;
+}
+
+body.auth-page .auth-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+    gap: 72px;
+    align-items: start;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 88px 48px 96px;
+}
+
+/* ---------- 左：引言 ---------- */
+body.auth-page .auth-lede {
+    padding-top: 8px;
+}
+
+body.auth-page .auth-kicker {
+    margin: 0 0 22px;
+    padding-left: 12px;
+    border-left: 3px solid var(--sp-accent);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: .3em;
+    color: var(--sp-ink-mute);
+}
+
+body.auth-page .auth-title {
+    margin: 0 0 20px;
+    font-size: clamp(34px, 3.4vw, 48px);
+    font-weight: 700;
+    line-height: 1.16;
+    letter-spacing: .04em;
+    color: var(--sp-ink);
+}
+
+body.auth-page .auth-em {
+    color: var(--sp-accent);
+    -webkit-text-fill-color: var(--sp-accent);
+}
+
+body.auth-page .auth-sub {
+    max-width: 30em;
+    margin: 0 0 32px;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 2;
+    letter-spacing: .03em;
+    color: var(--sp-ink-soft);
+}
+
+body.auth-page .auth-points {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--sp-rule);
+}
+
+body.auth-page .auth-points li {
+    position: relative;
+    padding: 13px 0 13px 20px;
+    border-bottom: 1px solid var(--sp-rule);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-soft);
+}
+
+body.auth-page .auth-points li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 20px;
+    width: 6px;
+    height: 6px;
+    background: var(--sp-accent);
+}
+
+/* ---------- 右：表单 ---------- */
+body.auth-page .auth-card {
+    position: relative;
+    padding: 34px 34px 28px;
+    background: #fff;
+    border: 1px solid var(--sp-rule-strong);
+    border-top: 3px solid var(--sp-accent);
+    box-shadow: 0 22px 50px -34px rgba(27, 25, 22, .55);
+}
+
+body.auth-page .auth-tabs {
+    display: flex;
+    gap: 0;
+    margin: 0 0 26px;
+    border-bottom: 1px solid var(--sp-rule);
+}
+
+body.auth-page .auth-tab {
+    position: relative;
+    padding: 0 0 13px;
+    margin-right: 28px;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--sp-ink-mute);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13.5px;
+    letter-spacing: .14em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color .2s ease;
+    min-height: 44px;
+}
+
+body.auth-page .auth-tab:hover { color: var(--sp-ink); }
+
+body.auth-page .auth-tab.active {
+    color: var(--sp-ink);
+}
+
+body.auth-page .auth-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--sp-accent);
+}
+
+body.auth-page .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* display:flex 会覆盖 hidden 属性的 display:none，必须显式压回来 */
+body.auth-page .auth-form[hidden] {
+    display: none;
+}
+
+body.auth-page .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+body.auth-page .field-label {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11px;
+    letter-spacing: .16em;
+    color: var(--sp-ink-mute);
+}
+
+body.auth-page .field input {
+    width: 100%;
+    padding: 12px 13px;
+    min-height: 44px;
+    background: var(--sp-paper);
+    border: 1px solid var(--sp-rule-strong);
+    border-radius: 0;
+    color: var(--sp-ink);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 14px;
+    letter-spacing: .02em;
+    transition: border-color .2s ease, background-color .2s ease;
+    box-sizing: border-box;
+}
+
+body.auth-page .field input::placeholder {
+    color: #b9b2a6;
+}
+
+body.auth-page .field input:focus {
+    outline: none;
+    border-color: var(--sp-accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-accent) 14%, transparent);
+}
+
+/* 无效态由 JS 在校验失败时加 .is-invalid（静态 CSS 无法区分"空"与"错"） */
+body.auth-page .field input.is-invalid {
+    border-color: #c0392b;
+}
+
+body.auth-page .field-hint {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-mute);
+}
+
+body.auth-page .auth-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+body.auth-page .check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-soft);
+    cursor: pointer;
+    min-height: 44px;
+}
+
+body.auth-page .check input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--sp-accent);
+}
+
+body.auth-page .auth-link {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--sp-rule);
+    transition: color .2s ease, border-color .2s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+body.auth-page .auth-link:hover {
+    color: var(--sp-accent);
+    border-color: var(--sp-accent);
+}
+
+/* 错误提示：静态占位，避免布局跳动 */
+body.auth-page .auth-error {
+    min-height: 18px;
+    margin: 0;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    line-height: 1.5;
+    letter-spacing: .04em;
+    color: #c0392b;
+}
+
+body.auth-page .auth-error:empty { display: none; }
+
+/* 提交按钮 */
+body.auth-page .auth-submit {
+    position: relative;
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 20px;
+    background: var(--sp-accent);
+    background-image: none;
+    border: 1px solid var(--sp-accent);
+    border-radius: 0;
+    color: #fff;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    cursor: pointer;
+    transition: background-color .22s ease, letter-spacing .22s ease, opacity .22s ease;
+    box-shadow: none;
+}
+
+body.auth-page .auth-submit:hover:not(:disabled) {
+    background-color: var(--theme-color-dark);
+    border-color: var(--theme-color-dark);
+    letter-spacing: .28em;
+}
+
+body.auth-page .auth-submit:disabled {
+    opacity: .6;
+    cursor: progress;
+}
+
+body.auth-page .auth-submit.is-loading .auth-submit-label {
+    visibility: hidden;
+}
+
+body.auth-page .auth-submit.is-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid rgba(255, 255, 255, .35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: auth-spin .7s linear infinite;
+}
+
+@keyframes auth-spin {
+    to { transform: rotate(360deg); }
+}
+
+body.auth-page .auth-foot {
+    margin: 22px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--sp-rule);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--sp-ink-mute);
+    text-align: center;
+}
+
+body.auth-page .auth-foot code {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--sp-ink-soft);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1080px) {
+    body.auth-page .auth-shell {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+        padding: 56px 32px 72px;
+    }
+    body.auth-page .auth-card { max-width: 460px; }
+}
+
+@media (max-width: 760px) {
+    body.auth-page .auth-shell {
+        padding: 36px 18px 56px;
+    }
+    body.auth-page .auth-title { font-size: 28px; }
+    body.auth-page .auth-card {
+        padding: 24px 20px 20px;
+        max-width: none;
+    }
+    body.auth-page .auth-sub { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.auth-page *,
+    body.auth-page *::before,
+    body.auth-page *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
