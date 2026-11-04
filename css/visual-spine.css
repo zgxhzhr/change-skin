@@ -1759,3 +1759,49 @@ body.visual-spine .header .user-logout {
     -webkit-text-fill-color: var(--sp-ink-soft) !important;
     color: var(--sp-ink-soft) !important;
 }
+
+/* ==========================================================================
+   书脊账户区：改用绝对定位钉死
+   之前用 flex + width:100% 反复失效（margin-left:auto 残留 / 交叉轴计算），
+   直接脱离 flex 流，按书脊左右内边距钉在底部，位置完全可控。
+   ========================================================================== */
+body.visual-spine .header {
+    position: sticky;   /* 保持粘附 */
+    position: relative; /* 让绝对定位子元素以书脊为参照 */
+}
+
+body.visual-spine .header .user-area {
+    position: absolute !important;
+    left: 24px !important;
+    right: 24px !important;
+    bottom: 96px !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    border-top: 1px solid var(--sp-rule);
+    padding-top: 16px !important;
+    box-sizing: border-box;
+}
+
+body.visual-spine .header .user-name,
+body.visual-spine .header .user-link,
+body.visual-spine .header .user-entry,
+body.visual-spine .header .user-logout {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    margin: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 刊名绝对定位在更下方，避免和账户区重叠 */
+body.visual-spine .header::after {
+    bottom: 24px !important;
+}
