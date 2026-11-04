@@ -111,6 +111,15 @@
     btn.classList.toggle('is-loading', loading);
   }
 
+  // 给校验失败的输入框加标记（CSS 靠 .is-invalid 判断，
+  // 静态 :invalid 会把空的 required 框也标红，误伤太重）
+  function markInvalid(el, bad) {
+    if (!el) return;
+    el.classList.toggle('is-invalid', !!bad);
+    if (bad) el.setAttribute('aria-invalid', 'true');
+    else el.removeAttribute('aria-invalid');
+  }
+
   function switchTab(which) {
     var isLogin = which === 'login';
     $('tabLogin').classList.toggle('active', isLogin);
@@ -144,8 +153,8 @@
     var errEl = $('loginError');
     var btn = $('loginSubmit');
 
-    if (!account) { setError(errEl, '请输入邮箱或用户名'); $('loginAccount').focus(); return; }
-    if (!password) { setError(errEl, '请输入密码'); $('loginPassword').focus(); return; }
+    if (!account) { markInvalid($('loginAccount'), true); setError(errEl, '请输入邮箱或用户名'); $('loginAccount').focus(); return; }
+    if (!password) { markInvalid($('loginPassword'), true); setError(errEl, '请输入密码'); $('loginPassword').focus(); return; }
 
     setError(errEl, '');
     setLoading(btn, true);
@@ -171,10 +180,10 @@
     var errEl = $('registerError');
     var btn = $('registerSubmit');
 
-    if (!clientCheckEmail(email)) { setError(errEl, '邮箱格式不正确'); $('regEmail').focus(); return; }
-    if (username.length < 2) { setError(errEl, '用户名至少 2 个字符'); $('regUsername').focus(); return; }
+    if (!clientCheckEmail(email)) { markInvalid($('regEmail'), true); setError(errEl, '邮箱格式不正确'); $('regEmail').focus(); return; }
+    if (username.length < 2) { markInvalid($('regUsername'), true); setError(errEl, '用户名至少 2 个字符'); $('regUsername').focus(); return; }
     var pwErr = clientCheckPassword(password);
-    if (pwErr) { setError(errEl, pwErr); $('regPassword').focus(); return; }
+    if (pwErr) { markInvalid($('regPassword'), true); setError(errEl, pwErr); $('regPassword').focus(); return; }
 
     setError(errEl, '');
     setLoading(btn, true);
