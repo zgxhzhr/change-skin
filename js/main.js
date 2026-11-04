@@ -421,10 +421,34 @@ class AuthUI {
     renderLoggedIn(user) {
         this.area.innerHTML = '';
 
+        const role = user.role || 'user';
+
         const name = document.createElement('span');
         name.className = 'user-name';
         name.textContent = user.username || user.email;
-        name.title = user.email || '';
+        name.title = (user.email || '') + ' · ' +
+            ({ user: '普通用户', merchant: '商家', admin: '管理员' }[role] || role);
+
+        const link = (href, text, cls) => {
+            const a = document.createElement('a');
+            a.href = href;
+            a.className = 'user-link' + (cls ? ' ' + cls : '');
+            a.textContent = text;
+            return a;
+        };
+
+        this.area.appendChild(name);
+
+        // 所有登录用户都能看自己的订单
+        this.area.appendChild(link('orders.html', '我的订单'));
+
+        // 商家 / 管理员才放出后台入口
+        if (role === 'merchant' || role === 'admin') {
+            this.area.appendChild(link('merchant.html', '商家后台', 'is-role'));
+        }
+        if (role === 'admin') {
+            this.area.appendChild(link('admin.html', '管理后台', 'is-admin'));
+        }
 
         const out = document.createElement('button');
         out.type = 'button';
@@ -432,7 +456,6 @@ class AuthUI {
         out.textContent = '登出';
         out.addEventListener('click', () => this.logout());
 
-        this.area.appendChild(name);
         this.area.appendChild(out);
     }
 
