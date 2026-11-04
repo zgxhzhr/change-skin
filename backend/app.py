@@ -69,6 +69,23 @@ def problem(status: int, title: str, detail: str, type_slug: str = "about:blank"
                         media_type="application/problem+json")
 
 
+# ---------------------------------------------------------------------------
+# 开发期缓存策略
+# python http.server / StaticFiles 都不发 Cache-Control，浏览器按启发式缓存，
+# 结果改了 CSS 但 HTML 里的 ?v= 版本号没更新 -> 一直加载旧样式。
+# 这里给 HTML 加 no-cache；静态资源仍靠 ?v= 控制。
+# ---------------------------------------------------------------------------
+@app.middleware("http")
+async def dev_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path == "/" or path.endswith(".html"):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(_: Request, exc: HTTPException):
     slug = {

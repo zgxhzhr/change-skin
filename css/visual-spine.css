@@ -1737,3 +1737,25 @@ body.visual-spine .header .user-logout {
     color: var(--sp-ink-soft) !important;
     opacity: 1 !important;
 }
+
+/* 有些继承链会把文字填充色压成浅色（-webkit-text-fill-color 优先于 color），
+   书脊里显式钉死填充色 */
+body.visual-spine .header .theme-tab .label,
+body.visual-spine .header .visual-btn,
+body.visual-spine .header .user-name,
+body.visual-spine .header .user-link,
+body.visual-spine .header .user-entry {
+    -webkit-text-fill-color: var(--sp-ink) !important;
+    color: var(--sp-ink) !important;
+}
+
+body.visual-spine .header .theme-tab.active .label,
+body.visual-spine .header .visual-btn.active {
+    -webkit-text-fill-color: var(--sp-accent) !important;
+    color: var(--sp-accent) !important;
+}
+
+body.visual-spine .header .user-logout {
+    -webkit-text-fill-color: var(--sp-ink-soft) !important;
+    color: var(--sp-ink-soft) !important;
+}
