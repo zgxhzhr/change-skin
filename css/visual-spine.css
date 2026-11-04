@@ -1537,3 +1537,43 @@ body.visual-spine .hero-cta:hover {
     background: var(--theme-color-dark) !important;
     border-color: var(--theme-color-dark) !important;
 }
+
+/* 账户区在书脊（浅纸底）里，白字不可见，改用墨色 */
+body.visual-spine .user-area {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sp-rule);
+    width: 100%;
+    margin-left: 0;
+}
+
+body.visual-spine .user-entry {
+    border-color: var(--sp-rule-strong);
+    border-radius: 0;
+    color: var(--sp-ink);
+    width: 100%;
+}
+
+body.visual-spine .user-entry:hover,
+body.visual-spine .user-entry:focus-visible {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+    color: #fff;
+}
+
+body.visual-spine .user-name {
+    color: var(--sp-ink);
+    max-width: 100%;
+}
+
+body.visual-spine .user-logout {
+    border-color: var(--sp-rule-strong);
+    border-radius: 0;
+    color: var(--sp-ink-soft);
+}
+
+body.visual-spine .user-logout:hover {
+    background: var(--sp-ink);
+    border-color: var(--sp-ink);
+    color: var(--sp-paper);
+}
