@@ -6,3 +6,13 @@ backend/server.log
 backend/server.err
 __pycache__/
 *.pyc
+
+# 运行时临时文件
+backend/_run.out
+backend/_run.err
+backend/*.log
+backend/*.err
+backend/__pycache__/
+_t.html
+_devlogin.html
+
