@@ -386,3 +386,41 @@ body.auth-page .auth-foot code {
         transition-duration: .01ms !important;
     }
 }
+
+/* ---------- 验证码行 ---------- */
+body.auth-page .code-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: stretch;
+}
+
+body.auth-page .code-send {
+    min-width: 116px;
+    min-height: 44px;
+    padding: 0 14px;
+    background: transparent;
+    border: 1px solid var(--sp-rule-strong);
+    border-radius: 0;
+    color: var(--sp-ink);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+body.auth-page .code-send:hover:not(:disabled) {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+    color: #fff;
+}
+
+body.auth-page .code-send:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+body.auth-page .field-hint.is-ok { color: #1e7a46; }
+body.auth-page .field-hint.is-warn { color: #c0392b; }

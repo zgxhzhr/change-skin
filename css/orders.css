@@ -1,0 +1,361 @@
+/* ==========================================================================
+   订单页 + 结算弹窗 · 书脊长卷风格
+   作用域：body.orders-page（订单页）、.checkout-modal（弹窗，全局）
+   ========================================================================== */
+
+/* ---------- 订单页骨架 ---------- */
+body.orders-page { min-height: 100vh; overflow-x: clip; }
+
+body.orders-page .auth-spine-links {
+    margin-top: auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--sp-rule);
+    width: 100%;
+}
+body.orders-page .auth-back {
+    display: inline-block;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .16em;
+    color: var(--sp-ink-soft);
+    text-decoration: none;
+    min-height: 44px;
+    line-height: 44px;
+    transition: color .2s ease, letter-spacing .2s ease;
+}
+body.orders-page .auth-back:hover { color: var(--sp-accent); letter-spacing: .22em; }
+
+body.orders-page .main-content {
+    grid-column: 2;
+    display: block;
+    min-height: 100vh;
+}
+
+body.orders-page .orders-shell {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+}
+
+body.orders-page .orders-kicker {
+    margin: 0 0 20px;
+    padding-left: 12px;
+    border-left: 3px solid var(--sp-accent);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: .3em;
+    color: var(--sp-ink-mute);
+}
+
+body.orders-page .orders-title {
+    margin: 0 0 16px;
+    font-size: clamp(32px, 3.2vw, 44px);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: .04em;
+    color: var(--sp-ink);
+}
+
+body.orders-page .orders-em {
+    color: var(--sp-accent);
+    -webkit-text-fill-color: var(--sp-accent);
+}
+
+body.orders-page .orders-sub {
+    max-width: 34em;
+    margin: 0 0 40px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--sp-rule);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 12.5px;
+    line-height: 2;
+    letter-spacing: .03em;
+    color: var(--sp-ink-soft);
+}
+
+body.orders-page .ord-empty {
+    margin: 0;
+    padding: 48px 0;
+    text-align: center;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-mute);
+}
+body.orders-page .ord-empty a {
+    color: var(--sp-accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+}
+
+/* ---------- 订单卡：一条台账，不是卡片 ---------- */
+body.orders-page .ord-card {
+    position: relative;
+    padding: 22px 0 20px;
+    border-top: 2px solid var(--sp-ink);
+    margin-bottom: 34px;
+}
+
+body.orders-page .ord-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+body.orders-page .ord-no {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: .06em;
+    color: var(--sp-ink-soft);
+}
+
+body.orders-page .ord-status {
+    padding: 3px 10px;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    border: 1px solid currentColor;
+}
+
+body.orders-page .ord-status.is-pending { color: #b8860b; }
+body.orders-page .ord-status.is-paid { color: var(--sp-accent); }
+body.orders-page .ord-status.is-shipped { color: #1e7a46; }
+
+body.orders-page .ord-items {
+    margin: 0 0 14px;
+    padding: 0;
+    list-style: none;
+}
+
+body.orders-page .ord-items li {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 56px 92px;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--sp-rule);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--sp-ink);
+}
+
+body.orders-page .ord-items img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 1px;
+    background: var(--sp-paper-deep);
+}
+
+body.orders-page .ord-item-name { letter-spacing: .03em; }
+
+body.orders-page .ord-item-qty {
+    color: var(--sp-ink-mute);
+    font-size: 12px;
+    text-align: right;
+}
+
+body.orders-page .ord-item-price {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 13px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+body.orders-page .ord-foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 12px;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    color: var(--sp-ink-mute);
+}
+
+body.orders-page .ord-total strong {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 16px;
+    color: var(--sp-accent);
+    font-variant-numeric: tabular-nums;
+    margin-left: 6px;
+}
+
+body.orders-page .ord-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+body.orders-page .ord-btn {
+    min-height: 42px;
+    padding: 0 24px;
+    border: 1px solid var(--sp-ink);
+    border-radius: 0;
+    background: var(--sp-ink);
+    color: var(--sp-paper);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .16em;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease, letter-spacing .2s ease;
+}
+
+body.orders-page .ord-btn:hover:not(:disabled) {
+    background: var(--sp-accent);
+    border-color: var(--sp-accent);
+    letter-spacing: .22em;
+}
+
+body.orders-page .ord-btn:disabled { opacity: .55; cursor: progress; }
+
+body.orders-page .ord-btn-ship {
+    background: transparent;
+    color: var(--sp-accent);
+    border-color: var(--sp-accent);
+}
+body.orders-page .ord-btn-ship:hover:not(:disabled) {
+    background: var(--sp-accent);
+    color: #fff;
+}
+
+body.orders-page .ord-done {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: #1e7a46;
+}
+
+/* ==========================================================================
+   结算弹窗（出现在 index.html，全局作用域）
+   ========================================================================== */
+.checkout-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ck-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(0, 0, 0, .03);
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: 2px;
+}
+
+.ck-item img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 1px;
+    background: #eee;
+}
+
+.ck-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ck-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+}
+
+.ck-item-price {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 13px;
+    color: #7A0080;
+    font-variant-numeric: tabular-nums;
+}
+
+.qty-row {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 6px;
+}
+
+.qty-btn {
+    width: 40px;
+    min-height: 40px;
+    border: 1px solid rgba(0, 0, 0, .22);
+    background: transparent;
+    color: #222;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .18s ease;
+}
+.qty-btn:hover { background: rgba(0, 0, 0, .06); }
+
+.qty-row input {
+    width: 68px !important;
+    min-height: 40px;
+    text-align: center;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-radius: 0 !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.ck-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, .12);
+    font-size: 13px;
+    color: #555;
+}
+
+.ck-total strong {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+    font-size: 20px;
+    color: #7A0080;
+    font-variant-numeric: tabular-nums;
+}
+
+.ck-error {
+    min-height: 18px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #c0392b;
+}
+
+/* 词条：让「我已付款」按钮在弹窗主题下也保持可读 */
+.checkout-modal .btn-confirm {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    letter-spacing: .14em;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1080px) {
+    body.orders-page .orders-shell { padding: 52px 28px 72px; }
+}
+
+@media (max-width: 760px) {
+    body.orders-page .orders-shell { padding: 32px 16px 56px; }
+    body.orders-page .orders-title { font-size: 27px; }
+    body.orders-page .ord-items li {
+        grid-template-columns: 40px minmax(0, 1fr) 44px 76px;
+        gap: 10px;
+        font-size: 12px;
+    }
+    body.orders-page .ord-foot { flex-direction: column; gap: 6px; }
+    body.orders-page .ord-actions { justify-content: stretch; }
+    body.orders-page .ord-btn { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.orders-page *,
+    body.orders-page *::before,
+    body.orders-page *::after { transition-duration: .01ms !important; }
+}

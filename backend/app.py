@@ -9,15 +9,21 @@ change-skin 商城后端 · FastAPI 应用
 """
 from __future__ import annotations
 
-from datetime import datetime
+import hashlib
+import os
+import secrets
+from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 import db
+import mailer
 from security import (
     burn_time,
     hash_password,
@@ -84,6 +90,12 @@ class RegisterIn(BaseModel):
     email: str = Field(..., max_length=190)
     username: str = Field(..., max_length=50)
     password: str = Field(..., max_length=128)
+    code: str = Field(..., max_length=6, description="邮箱验证码")
+
+
+class SendCodeIn(BaseModel):
+    email: str = Field(..., max_length=190)
+    purpose: str = Field("register", max_length=20)
 
 
 class LoginIn(BaseModel):
@@ -128,6 +140,107 @@ def current_user(authorization: str | None = Header(None)) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# 邮箱验证码
+# ---------------------------------------------------------------------------
+CODE_TTL_MINUTES = 5          # 有效期
+CODE_RESEND_SECONDS = 60      # 同邮箱重发冷却
+CODE_MAX_ATTEMPTS = 5         # 单个验证码最多试错次数
+
+
+def _hash_code(code: str) -> str:
+    return hashlib.sha256(code.encode("utf-8")).hexdigest()
+
+
+def _issue_code(email: str, purpose: str, ip: str | None) -> str:
+    """生成并投递验证码；返回明文（只在发信时用，不入库）。"""
+    code = f"{secrets.randbelow(1_000_000):06d}"
+    now = datetime.utcnow()
+    # created_at 显式写 UTC：表定义里是 DEFAULT CURRENT_TIMESTAMP（本地时间），
+    # 直接依赖默认值会和 expires_at(UTC) 相差一个时区，导致冷却判断算出负数。
+    db.execute(
+        "INSERT INTO email_codes (email, code_hash, purpose, expires_at, created_at, ip) "
+        "VALUES (%s, %s, %s, %s, %s, %s)",
+        (email, _hash_code(code), purpose,
+         now + timedelta(minutes=CODE_TTL_MINUTES), now, ip),
+    )
+    return code
+
+
+def _verify_code(email: str, code: str, purpose: str = "register") -> None:
+    """校验并消费验证码。失败抛 HTTPException。"""
+    if not code or not code.isdigit() or len(code) != 6:
+        raise HTTPException(422, "验证码应为 6 位数字")
+
+    row = db.fetch_one(
+        "SELECT id, code_hash, attempts, expires_at, consumed_at "
+        "FROM email_codes WHERE email = %s AND purpose = %s "
+        "ORDER BY id DESC LIMIT 1",
+        (email, purpose),
+    )
+    if not row:
+        raise HTTPException(422, "请先获取邮箱验证码")
+    if row["consumed_at"] is not None:
+        raise HTTPException(422, "验证码已使用，请重新获取")
+    if row["expires_at"] < datetime.utcnow():
+        raise HTTPException(422, "验证码已过期，请重新获取")
+    if row["attempts"] >= CODE_MAX_ATTEMPTS:
+        raise HTTPException(429, "验证码错误次数过多，请重新获取")
+
+    if _hash_code(code) != row["code_hash"]:
+        db.execute(
+            "UPDATE email_codes SET attempts = attempts + 1 WHERE id = %s",
+            (row["id"],),
+        )
+        raise HTTPException(422, "验证码不正确")
+
+    # 正确：标记已消费（一次性）
+    db.execute(
+        "UPDATE email_codes SET consumed_at = %s WHERE id = %s",
+        (datetime.utcnow(), row["id"]),
+    )
+
+
+@app.post("/api/v1/auth/send-code")
+def send_code(payload: SendCodeIn, request: Request):
+    email = payload.email.strip().lower()
+    purpose = payload.purpose.strip() or "register"
+
+    if purpose not in ("register", "reset"):
+        raise HTTPException(422, "未知的验证码用途")
+    if not is_valid_email(email):
+        raise HTTPException(422, "邮箱格式不正确")
+
+    if purpose == "register":
+        taken = db.fetch_one("SELECT id FROM users WHERE email = %s LIMIT 1", (email,))
+        if taken:
+            raise HTTPException(409, "该邮箱已被注册")
+
+    # 冷却：同邮箱 60 秒内只能发一次
+    recent = db.fetch_one(
+        "SELECT created_at FROM email_codes WHERE email = %s AND purpose = %s "
+        "ORDER BY id DESC LIMIT 1",
+        (email, purpose),
+    )
+    if recent:
+        elapsed = (datetime.utcnow() - recent["created_at"]).total_seconds()
+        if elapsed < CODE_RESEND_SECONDS:
+            wait = int(CODE_RESEND_SECONDS - elapsed)
+            raise HTTPException(429, f"发送太频繁，请 {wait} 秒后再试")
+
+    code = _issue_code(email, purpose, request.client.host if request.client else None)
+
+    if not mailer.send_code(email, code, purpose):
+        raise HTTPException(503, "验证码发送失败，请稍后重试或联系管理员")
+
+    return {
+        "sent": True,
+        "delivery": "smtp" if mailer.is_enabled() else "console",
+        "expires_in": CODE_TTL_MINUTES * 60,
+        "resend_after": CODE_RESEND_SECONDS,
+    }
+
+
+# ---------------------------------------------------------------------------
 # 认证
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/auth/register", status_code=201)
@@ -142,6 +255,9 @@ def register(payload: RegisterIn):
     err = password_strength_error(payload.password)
     if err:
         raise HTTPException(422, err)
+
+    # 验证码必须先过
+    _verify_code(email, payload.code.strip(), "register")
 
     exists = db.fetch_one(
         "SELECT id FROM users WHERE email = %s OR username = %s LIMIT 1",
@@ -356,6 +472,223 @@ def get_product(product_id: int):
 def health():
     try:
         db.fetch_one("SELECT 1 AS ok")
-        return {"status": "ok", "db": "up"}
+        return {"status": "ok", "db": "up", "mail": "smtp" if mailer.is_enabled() else "console"}
     except Exception as exc:  # noqa: BLE001
         return problem(503, "数据库不可用", str(exc), "dependency-unavailable")
+
+
+# ---------------------------------------------------------------------------
+# 订单
+#
+# 状态机（只允许这些转移，其余一律拒绝）：
+#   pending ──用户点「我已付款」──> paid ──发货──> shipped
+#
+# 「是否已付款」按需求定义为：用户点击声明已付款的按钮，不接真实支付网关。
+# 发货是唯一改动商品数据的动作（库存 -qty、月销 +qty），必须在一个事务内完成。
+# ---------------------------------------------------------------------------
+ORDER_NO_PREFIX = datetime.utcnow().strftime("%Y%m%d")
+
+
+class OrderItemIn(BaseModel):
+    product_id: int = Field(..., gt=0)
+    qty: int = Field(1, ge=1, le=99)
+
+
+class OrderIn(BaseModel):
+    items: list[OrderItemIn] = Field(...)
+    addr: str = Field(..., max_length=200)
+    phone: str = Field(..., max_length=30)
+    note: str = Field("", max_length=200)
+
+
+class ShipIn(BaseModel):
+    note: str = Field("", max_length=200)
+
+
+def _gen_order_no() -> str:
+    return ORDER_NO_PREFIX + "".join(secrets.choice("0123456789") for _ in range(8))
+
+
+def _load_order(order_id: int, user_id: int) -> dict[str, Any]:
+    order = db.fetch_one(
+        "SELECT id, order_no, user_id, total_cents, status, addr, phone, "
+        "paid_at, shipped_at, note, created_at FROM orders WHERE id = %s AND user_id = %s",
+        (order_id, user_id),
+    )
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    order["items"] = db.fetch_all(
+        "SELECT product_id, name_snapshot, image_snapshot, price_cents, qty "
+        "FROM order_items WHERE order_id = %s ORDER BY id",
+        (order_id,),
+    )
+    order["total"] = round(order["total_cents"] / 100, 2)
+    for it in order["items"]:
+        it["price"] = round(it["price_cents"] / 100, 2)
+    return order
+
+
+@app.post("/api/v1/orders", status_code=201)
+def create_order(payload: OrderIn, user: dict = Depends(current_user)):
+    addr = payload.addr.strip()
+    phone = payload.phone.strip()
+    if len(addr) < 5:
+        raise HTTPException(422, "请填写完整收货地址")
+    if len(phone) < 6:
+        raise HTTPException(422, "请填写有效联系电话")
+
+    # 合并重复商品，避免同一商品两行各扣一次库存
+    wanted: dict[int, int] = {}
+    for it in payload.items:
+        wanted[it.product_id] = wanted.get(it.product_id, 0) + it.qty
+
+    ids = list(wanted.keys())
+    placeholders = ",".join(["%s"] * len(ids))
+    rows = db.fetch_all(
+        f"SELECT id, name, image, price_cents, stock, is_active "
+        f"FROM products WHERE id IN ({placeholders})",
+        tuple(ids),
+    )
+    by_id = {r["id"]: r for r in rows}
+
+    total_cents = 0
+    for pid, qty in wanted.items():
+        p = by_id.get(pid)
+        if not p or not p["is_active"]:
+            raise HTTPException(422, f"商品 {pid} 不存在或已下架")
+        if p["stock"] < qty:
+            raise HTTPException(409, f"「{p['name']}」库存不足（剩 {p['stock']} 件）")
+        total_cents += p["price_cents"] * qty
+
+    order_no = _gen_order_no()
+    while db.fetch_one("SELECT id FROM orders WHERE order_no = %s", (order_no,)):
+        order_no = _gen_order_no()
+
+    with db.get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO orders (order_no, user_id, total_cents, status, addr, phone, note) "
+                "VALUES (%s, %s, %s, 'pending', %s, %s, %s)",
+                (order_no, user["id"], total_cents, addr, phone, payload.note.strip()),
+            )
+            order_id = cur.lastrowid
+            for pid, qty in wanted.items():
+                p = by_id[pid]
+                cur.execute(
+                    "INSERT INTO order_items "
+                    "(order_id, product_id, name_snapshot, image_snapshot, price_cents, qty) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    (order_id, pid, p["name"], p["image"], p["price_cents"], qty),
+                )
+
+    return _load_order(order_id, user["id"])
+
+
+@app.get("/api/v1/orders")
+def list_orders(user: dict = Depends(current_user), limit: int = Query(20, ge=1, le=100)):
+    rows = db.fetch_all(
+        "SELECT id FROM orders WHERE user_id = %s ORDER BY id DESC LIMIT %s",
+        (user["id"], limit),
+    )
+    return {"data": [_load_order(r["id"], user["id"]) for r in rows]}
+
+
+@app.get("/api/v1/orders/{order_id}")
+def get_order(order_id: int, user: dict = Depends(current_user)):
+    return _load_order(order_id, user["id"])
+
+
+@app.post("/api/v1/orders/{order_id}/pay")
+def pay_order(order_id: int, user: dict = Depends(current_user)):
+    """用户声明已付款。只允许 pending → paid，重复点击幂等返回。"""
+    order = db.fetch_one(
+        "SELECT id, status FROM orders WHERE id = %s AND user_id = %s",
+        (order_id, user["id"]),
+    )
+    if not order:
+        raise HTTPException(404, "订单不存在")
+
+    if order["status"] == "paid":
+        return _load_order(order_id, user["id"])      # 幂等
+    if order["status"] != "pending":
+        raise HTTPException(409, f"当前状态（{order['status']}）不能付款")
+
+    # 条件更新：并发下只有一个请求能把它从 pending 改成 paid
+    affected = db.execute(
+        "UPDATE orders SET status = 'paid', paid_at = %s "
+        "WHERE id = %s AND user_id = %s AND status = 'pending'",
+        (datetime.utcnow(), order_id, user["id"]),
+    )
+    if not affected:
+        raise HTTPException(409, "订单状态已变化，请刷新后重试")
+
+    return _load_order(order_id, user["id"])
+
+
+@app.post("/api/v1/orders/{order_id}/ship")
+def ship_order(order_id: int, payload: ShipIn, user: dict = Depends(current_user)):
+    """
+    发货：paid → shipped，并在同一事务里
+      products.stock         -= qty
+      products.monthly_sales += qty
+    库存扣减带 `WHERE stock >= qty` 做原子校验，避免并发超卖。
+    """
+    order = db.fetch_one(
+        "SELECT id, status FROM orders WHERE id = %s AND user_id = %s",
+        (order_id, user["id"]),
+    )
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    if order["status"] == "shipped":
+        return _load_order(order_id, user["id"])       # 幂等
+    if order["status"] != "paid":
+        raise HTTPException(409, "订单未付款，不能发货")
+
+    items = db.fetch_all(
+        "SELECT product_id, name_snapshot, qty FROM order_items WHERE order_id = %s",
+        (order_id,),
+    )
+    if not items:
+        raise HTTPException(409, "订单没有商品明细")
+
+    try:
+        with db.get_conn() as conn:
+            with conn.cursor() as cur:
+                # 1) 锁住订单状态：条件更新防止并发重复发货
+                cur.execute(
+                    "UPDATE orders SET status = 'shipped', shipped_at = %s, note = %s "
+                    "WHERE id = %s AND status = 'paid'",
+                    (datetime.utcnow(), payload.note.strip(), order_id),
+                )
+                if cur.rowcount == 0:
+                    raise HTTPException(409, "订单状态已变化，请刷新后重试")
+
+                # 2) 扣库存 + 加销量；任一件库存不足则整单回滚
+                for it in items:
+                    cur.execute(
+                        "UPDATE products SET stock = stock - %s, "
+                        "monthly_sales = monthly_sales + %s "
+                        "WHERE id = %s AND stock >= %s",
+                        (it["qty"], it["qty"], it["product_id"], it["qty"]),
+                    )
+                    if cur.rowcount == 0:
+                        raise HTTPException(
+                            409, f"「{it['name_snapshot']}」库存不足，发货失败"
+                        )
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(500, f"发货失败：{exc}") from exc
+
+    return _load_order(order_id, user["id"])
+
+
+# ---------------------------------------------------------------------------
+# 前端托管：必须放在所有 API 路由之后挂载，
+# 否则 "/" 的 StaticFiles 会吃掉 /api/v1/*
+# 这样只需启动后端一个进程，前端也一并可用。
+# ---------------------------------------------------------------------------
+FRONTEND_DIR = Path(__file__).resolve().parent.parent
+
+if (FRONTEND_DIR / "index.html").exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")

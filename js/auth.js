@@ -11,7 +11,11 @@
 (function () {
   'use strict';
 
-  var API_BASE = (window.CS_API_BASE || 'http://127.0.0.1:8000') + '/api/v1';
+  // 同源优先：后端已托管前端，访问 http://127.0.0.1:8000/login.html 时走相对路径，
+  // 从 8777 静态服务打开时才回退到 8000。
+  var API_ORIGIN = window.CS_API_BASE ||
+    (location.port === '8000' ? '' : 'http://127.0.0.1:8000');
+  var API_BASE = API_ORIGIN + '/api/v1';
   var TOKEN_KEY = 'cs_token';
 
   // -------------------------------------------------------------------------
@@ -120,6 +124,72 @@
     else el.removeAttribute('aria-invalid');
   }
 
+  // -------------------------------------------------------------------------
+  // 邮箱验证码
+  // -------------------------------------------------------------------------
+  var codeTimer = null;
+  var codeCooldown = 0;
+
+  function setCodeHint(text, cls) {
+    var el = $('codeHint');
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('is-ok', 'is-warn');
+    if (cls) el.classList.add(cls);
+  }
+
+  function startCooldown(seconds) {
+    codeCooldown = seconds;
+    var btn = $('sendCodeBtn');
+    if (!btn) return;
+    btn.disabled = true;
+    btn.textContent = codeCooldown + ' 秒后重发';
+    if (codeTimer) clearInterval(codeTimer);
+    codeTimer = setInterval(function () {
+      codeCooldown -= 1;
+      if (codeCooldown <= 0) {
+        clearInterval(codeTimer);
+        codeTimer = null;
+        btn.disabled = false;
+        btn.textContent = '重新获取';
+        setCodeHint('验证码 5 分钟内有效，一次性使用');
+      } else {
+        btn.textContent = codeCooldown + ' 秒后重发';
+      }
+    }, 1000);
+  }
+
+  function onSendCode() {
+    var email = $('regEmail').value.trim();
+    var btn = $('sendCodeBtn');
+    var errEl = $('registerError');
+
+    if (!clientCheckEmail(email)) {
+      markInvalid($('regEmail'), true);
+      setError(errEl, '请先填写正确的邮箱');
+      $('regEmail').focus();
+      return;
+    }
+
+    markInvalid($('regEmail'), false);
+    setError(errEl, '');
+    btn.disabled = true;
+    btn.textContent = '发送中…';
+
+    request('/auth/send-code', { method: 'POST', body: { email: email, purpose: 'register' } })
+      .then(function (data) {
+        var where = data.delivery === 'smtp' ? '验证码已发送到邮箱' : '开发模式：验证码已输出到后端控制台';
+        setCodeHint(where + '，5 分钟内有效', 'is-ok');
+        startCooldown(data.resend_after || 60);
+        $('regCode').focus();
+      })
+      .catch(function (err) {
+        setError(errEl, err.message);
+        setCodeHint('发送失败，请稍后重试', 'is-warn');
+        btn.disabled = false;
+        btn.textContent = '重新获取';
+      });
+  }
   function switchTab(which) {
     var isLogin = which === 'login';
     $('tabLogin').classList.toggle('active', isLogin);
@@ -175,12 +245,14 @@
   function onSubmitRegister(e) {
     e.preventDefault();
     var email = $('regEmail').value.trim();
+    var code = $('regCode').value.trim();
     var username = $('regUsername').value.trim();
     var password = $('regPassword').value;
     var errEl = $('registerError');
     var btn = $('registerSubmit');
 
     if (!clientCheckEmail(email)) { markInvalid($('regEmail'), true); setError(errEl, '邮箱格式不正确'); $('regEmail').focus(); return; }
+    if (!/^\d{6}$/.test(code)) { markInvalid($('regCode'), true); setError(errEl, '请输入 6 位邮箱验证码'); $('regCode').focus(); return; }
     if (username.length < 2) { markInvalid($('regUsername'), true); setError(errEl, '用户名至少 2 个字符'); $('regUsername').focus(); return; }
     var pwErr = clientCheckPassword(password);
     if (pwErr) { markInvalid($('regPassword'), true); setError(errEl, pwErr); $('regPassword').focus(); return; }
@@ -188,7 +260,7 @@
     setError(errEl, '');
     setLoading(btn, true);
 
-    request('/auth/register', { method: 'POST', body: { email: email, username: username, password: password } })
+    request('/auth/register', { method: 'POST', body: { email: email, username: username, password: password, code: code } })
       .then(function (data) {
         saveToken(data.token, true);
         try { localStorage.setItem('cs_user', JSON.stringify(data.user)); } catch (e2) { /* 忽略 */ }

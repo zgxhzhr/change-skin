@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的订单 · 异世界商城</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/visual-spine.css">
+  <link rel="stylesheet" href="css/orders.css">
+</head>
+<body class="visual-spine orders-page">
+
+  <a class="skip-link" href="#ordersMain">跳到订单列表</a>
+
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <img src="img/red.webp" alt="" class="logo" width="52" height="52">
+        <span class="brand-name">异世<span class="brand-accent">界</span></span>
+      </div>
+
+      <nav aria-label="主题切换">
+        <ul class="theme-tabs" role="tablist">
+          <li><button class="theme-tab" data-theme="red" type="button"><span class="swatch" style="background:#ff0000"></span><span class="label">炽热红</span></button></li>
+          <li><button class="theme-tab" data-theme="green" type="button"><span class="swatch" style="background:#00c800"></span><span class="label">森绿</span></button></li>
+          <li><button class="theme-tab" data-theme="blue" type="button"><span class="swatch" style="background:#0040ff"></span><span class="label">深空蓝</span></button></li>
+          <li><button class="theme-tab" data-theme="orange" type="button"><span class="swatch" style="background:#ff6f00"></span><span class="label">活力橙</span></button></li>
+          <li><button class="theme-tab active" data-theme="purple" type="button"><span class="swatch" style="background:#7A0080"></span><span class="label">紫晶</span></button></li>
+        </ul>
+      </nav>
+
+      <div class="auth-spine-links">
+        <a href="index.html" class="auth-back">← 返回商城</a>
+      </div>
+    </header>
+
+    <main class="main-content" id="ordersMain">
+      <section class="orders-shell">
+        <div class="orders-lede">
+          <p class="orders-kicker">ORDERS · 订单台账</p>
+          <h1 class="orders-title">我的<span class="orders-em">订单</span></h1>
+          <p class="orders-sub">
+            下单后在下方点「我已付款」确认支付，随后点「发货」完成出库——
+            发货那一刻库存会减少、月销会增加。
+          </p>
+        </div>
+
+        <div class="orders-body">
+          <div id="orderList">
+            <p class="ord-empty">加载中…</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/orders.js?v=1" defer></script>
+</body>
+</html>

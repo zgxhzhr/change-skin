@@ -1,0 +1,8 @@
+
+# 本地配置与运行日志
+backend/.env
+backend/.env.local
+backend/server.log
+backend/server.err
+__pycache__/
+*.pyc

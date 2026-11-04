@@ -8,6 +8,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css?v=20261104a">
     <link rel="stylesheet" href="css/modal.css?v=20261104a">
+    <link rel="stylesheet" href="css/orders.css?v=1">
     <link rel="stylesheet" href="css/banner.css?v=20261104a">
     <!-- 三套并行视觉风格（通过 body.visual-* 切换，互不干扰） -->
     <link rel="stylesheet" href="css/visual-manga.css?v=20261104a">
@@ -465,31 +466,51 @@
 
     <!-- 4. Hero 立即抢购结算 -->
     <div id="modal-mask-checkout" class="modal-mask">
-        <div class="modal">
+        <div class="modal checkout-modal">
             <div class="modal-head">
-                <h3 class="modal-title">立即抢购 · 结算</h3>
+                <h3 class="modal-title">结算</h3>
                 <button class="close-btn" data-fixed-text="×">×</button>
             </div>
             <div class="modal-content">
+                <!-- 结算商品（由 JS 填入） -->
+                <div class="ck-item" id="ckItem">
+                    <img id="ckItemImg" src="" alt="" width="72" height="72">
+                    <div class="ck-item-info">
+                        <span class="ck-item-name" id="ckItemName">请选择商品</span>
+                        <span class="ck-item-price" id="ckItemPrice"></span>
+                    </div>
+                </div>
+
+                <label>购买数量
+                    <span class="qty-row">
+                        <button type="button" class="qty-btn" id="qtyMinus" aria-label="减少数量">−</button>
+                        <input type="number" id="ckQty" value="1" min="1" max="99" inputmode="numeric">
+                        <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加数量">+</button>
+                    </span>
+                </label>
                 <label>收货地址
-                    <input type="text" id="ckAddr" placeholder="请填写完整收货地址" required>
+                    <input type="text" id="ckAddr" placeholder="请填写完整收货地址" required maxlength="200">
                 </label>
                 <label>联系电话
-                    <input type="tel" id="ckPhone" placeholder="请输入手机号码" required>
+                    <input type="tel" id="ckPhone" placeholder="请输入手机号码" required maxlength="30">
                 </label>
-                <label>购买数量
-                    <input type="number" id="ckQty" value="1" min="1" max="99">
-                </label>
+
+                <div class="ck-total">
+                    <span>合计</span>
+                    <strong id="ckTotal">¥0</strong>
+                </div>
+                <p class="ck-error" id="ckError" role="alert" aria-live="polite"></p>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel">取消</button>
-                <button class="btn-confirm">提交订单</button>
+                <button class="btn-confirm" id="ckSubmit">提交订单</button>
             </div>
         </div>
     </div>
 
     <script src="js/mulModal.base.js?v=20261104a"></script>
     <script src="js/banner-carousel.js?v=20261104a"></script>
+    <script src="js/orders.js?v=1" defer></script>
     <script src="js/main.js?v=20261104a" defer></script>
 
 </body>
