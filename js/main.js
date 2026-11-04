@@ -342,6 +342,120 @@ class ModalsInit {
     }
 }
 
+
+/**
+ * 账户区：未登录显示「登录」，已登录显示用户名 + 登出。
+ * token 由登录页写入 localStorage / sessionStorage，这里只读。
+ */
+class AuthUI {
+    constructor() {
+        this.apiBase = (window.CS_API_BASE || 'http://127.0.0.1:8000') + '/api/v1';
+        this.area = document.getElementById('userArea');
+        this.entry = document.getElementById('userEntry');
+        this.token = this.readToken();
+        this.user = null;
+    }
+
+    readToken() {
+        try {
+            return localStorage.getItem('cs_token') || sessionStorage.getItem('cs_token') || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    clearToken() {
+        try {
+            localStorage.removeItem('cs_token');
+            sessionStorage.removeItem('cs_token');
+            localStorage.removeItem('cs_user');
+        } catch (e) { /* 忽略 */ }
+    }
+
+    bindEvents() {
+        if (!this.area || !this.entry) return;
+
+        // 先按缓存渲染，避免闪烁
+        const cached = this.readCachedUser();
+        if (this.token && cached) this.renderLoggedIn(cached);
+        else this.renderLoggedOut();
+
+        if (!this.token) return;
+
+        // 再向服务端确认 token 是否仍有效
+        fetch(this.apiBase + '/auth/me', {
+            headers: { Authorization: 'Bearer ' + this.token }
+        })
+            .then(res => (res.ok ? res.json() : Promise.reject(res)))
+            .then(data => {
+                this.user = data.user;
+                this.renderLoggedIn(data.user);
+                this.applyPreferences(data.preferences);
+            })
+            .catch(() => {
+                this.clearToken();
+                this.token = '';
+                this.renderLoggedOut();
+            });
+    }
+
+    readCachedUser() {
+        try {
+            const raw = localStorage.getItem('cs_user');
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    renderLoggedOut() {
+        this.area.innerHTML = '';
+        const a = document.createElement('a');
+        a.href = 'login.html';
+        a.className = 'user-entry';
+        a.id = 'userEntry';
+        a.textContent = '登录';
+        this.area.appendChild(a);
+    }
+
+    renderLoggedIn(user) {
+        this.area.innerHTML = '';
+
+        const name = document.createElement('span');
+        name.className = 'user-name';
+        name.textContent = user.username || user.email;
+        name.title = user.email || '';
+
+        const out = document.createElement('button');
+        out.type = 'button';
+        out.className = 'user-logout';
+        out.textContent = '登出';
+        out.addEventListener('click', () => this.logout());
+
+        this.area.appendChild(name);
+        this.area.appendChild(out);
+    }
+
+    logout() {
+        const token = this.token;
+        this.clearToken();
+        this.token = '';
+        this.renderLoggedOut();
+        if (!token) return;
+
+        fetch(this.apiBase + '/auth/logout', {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + token }
+        }).catch(() => { /* 服务端失败也不影响本地登出 */ });
+    }
+
+    /** 把账号里存的配色/风格偏好应用到当前页面 */
+    applyPreferences(pref) {
+        if (!pref) return;
+        try { localStorage.setItem('shopmod-theme', pref.theme); } catch (e) { /* 忽略 */ }
+        try { localStorage.setItem('shopmod-visual-style', pref.visual_style); } catch (e) { /* 忽略 */ }
+    }
+}
 const init = () => {
     [
         ThemeSwitcher,
@@ -351,7 +465,8 @@ const init = () => {
         VisualSwitcher,
         ContentTabs,
         ImageCarousel,
-        BannerCarousel
+        BannerCarousel,
+        AuthUI
     ].forEach(Cls => new Cls().bindEvents());
 
     new ModalsInit().bindEvents();

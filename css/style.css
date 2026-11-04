@@ -1389,3 +1389,73 @@ body.visual-editorial :focus-visible {
     white-space: nowrap;
     border: 0;
 }
+
+/* ==========================================================================
+   账户区（header 内）：未登录显示「登录」，登录后显示用户名 + 登出
+   各视觉风格通过 --theme-color 自动换色，无需逐套覆盖
+   ========================================================================== */
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 6px;
+    flex-shrink: 0;
+}
+
+.user-entry {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 18px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, .92);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-decoration: none;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.user-entry:hover,
+.user-entry:focus-visible {
+    background: rgba(255, 255, 255, .16);
+    color: #fff;
+}
+
+.user-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, .95);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: .04em;
+}
+
+.user-logout {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, .38);
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(255, 255, 255, .85);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.user-logout:hover {
+    background: rgba(255, 255, 255, .16);
+    border-color: rgba(255, 255, 255, .6);
+}
+
+@media (max-width: 720px) {
+    .user-name { max-width: 84px; font-size: 12px; }
+    .user-entry { padding: 0 12px; min-height: 36px; font-size: 12px; }
+    .user-logout { min-height: 36px; padding: 0 10px; font-size: 11px; }
+}
