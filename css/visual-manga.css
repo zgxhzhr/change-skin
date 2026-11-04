@@ -474,3 +474,9 @@ body.visual-manga .product-item::after {
     display: block;
 }
 body.visual-manga .product-item:hover::after { transform: scaleY(1); }
+
+/* header 是白底，必须显式给深色文字，否则继承基础样式的 color:white，
+   账户区等依赖 currentColor 的元素会变成白字看不见 */
+body.visual-manga .header {
+    color: var(--mg-ink);
+}

@@ -760,3 +760,8 @@ body.visual-editorial .product-item:hover .product-img img {
     outline: 3px solid var(--ed-accent);
     outline-offset: -3px;
 }
+
+/* 杂志风 header 透明，按纸底给深色文字（同样修正 currentColor 继承） */
+body.visual-editorial .header {
+    color: var(--ed-ink);
+}

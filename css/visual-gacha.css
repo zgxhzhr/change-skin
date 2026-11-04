@@ -1058,3 +1058,8 @@ body.visual-gacha .product-item:hover {
 body.visual-gacha .product-item:hover::after {
     transform: scaleY(1);
 }
+
+/* 扭蛋 header 是深色面板，文字保持浅色 */
+body.visual-gacha .header {
+    color: #f2f0ff;
+}

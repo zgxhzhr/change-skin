@@ -1630,3 +1630,7 @@ body.visual-spine .user-logout {
     border-radius: 0;
     margin-top: 6px;
 }
+/* 书脊 header 是浅纸底，文字用墨色 */
+body.visual-spine .header {
+    color: var(--sp-ink);
+}
