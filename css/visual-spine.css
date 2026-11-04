@@ -1805,3 +1805,97 @@ body.visual-spine .header .user-logout {
 body.visual-spine .header::after {
     bottom: 24px !important;
 }
+
+/* ==========================================================================
+   账户区（已从 header 移出，现在在 main-content 顶部）
+   书脊布局下 header 是固定高度的书脊，塞不下账户区，
+   改为浮在 banner 右上角（半透明底 + 白字，压在图上可读）
+   ========================================================================== */
+body.visual-spine .main-content {
+    position: relative;
+}
+
+body.visual-spine .main-content > .user-area {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    z-index: 30;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+body.visual-spine .main-content > .user-area .user-name,
+body.visual-spine .main-content > .user-area .user-link,
+body.visual-spine .main-content > .user-area .user-entry,
+body.visual-spine .main-content > .user-area .user-logout {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    background: rgba(18, 16, 14, .46);
+    border: 1px solid rgba(255, 255, 255, .38) !important;
+    border-radius: 999px;
+    padding: 0 14px;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: .06em;
+    white-space: nowrap;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    box-shadow: none;
+}
+
+body.visual-spine .main-content > .user-area .user-name {
+    background: transparent;
+    border-color: transparent !important;
+    padding-left: 4px;
+    opacity: .95;
+}
+
+body.visual-spine .main-content > .user-area .user-link:hover,
+body.visual-spine .main-content > .user-area .user-entry:hover,
+body.visual-spine .main-content > .user-area .user-logout:hover {
+    background: rgba(18, 16, 14, .74);
+    border-color: rgba(255, 255, 255, .8) !important;
+}
+
+/* 窄屏：账户区回到正常流，横向排列在 banner 上方 */
+@media (max-width: 760px) {
+    body.visual-spine .main-content > .user-area {
+        position: static;
+        padding: 10px 16px 6px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+/* 覆盖之前那批不带 .header 前缀的 width:100% 规则（它们现在会匹配到
+   内容栏顶部的账户区，把每个按钮撑成整行） */
+body.visual-spine .main-content > .user-area .user-link,
+body.visual-spine .main-content > .user-area .user-entry,
+body.visual-spine .main-content > .user-area .user-logout,
+body.visual-spine .main-content > .user-area .user-name {
+    width: auto !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+}
+
+/* 还有一条不带 .header 的 body.visual-spine .user-area{flex-direction:column}
+   在起作用，一并压掉 */
+body.visual-spine .main-content > .user-area {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border: 0 !important;
+}
