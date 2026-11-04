@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商家后台 · 异世界商城</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/visual-spine.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="visual-spine admin-page" data-admin-page="merchant">
+
+  <a class="skip-link" href="#adminMain">跳到后台内容</a>
+
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <img src="img/red.webp" alt="" class="logo" width="52" height="52">
+        <span class="brand-name">异世<span class="brand-accent">界</span></span>
+      </div>
+
+      <nav aria-label="主题切换">
+        <ul class="theme-tabs" role="tablist">
+          <li><button class="theme-tab" data-theme="red" type="button"><span class="swatch" style="background:#ff0000"></span><span class="label">炽热红</span></button></li>
+          <li><button class="theme-tab" data-theme="green" type="button"><span class="swatch" style="background:#00c800"></span><span class="label">森绿</span></button></li>
+          <li><button class="theme-tab" data-theme="blue" type="button"><span class="swatch" style="background:#0040ff"></span><span class="label">深空蓝</span></button></li>
+          <li><button class="theme-tab" data-theme="orange" type="button"><span class="swatch" style="background:#ff6f00"></span><span class="label">活力橙</span></button></li>
+          <li><button class="theme-tab active" data-theme="purple" type="button"><span class="swatch" style="background:#7A0080"></span><span class="label">紫晶</span></button></li>
+        </ul>
+      </nav>
+
+      <p class="who-am-i" id="whoAmI">校验身份中…</p>
+
+      <div class="auth-spine-links">
+        <a href="index.html" class="auth-back">← 商城</a>
+        <a href="orders.html" class="auth-back">我的订单</a>
+      </div>
+    </header>
+
+    <main class="main-content" id="adminMain">
+      <section class="admin-shell">
+        <header class="admin-head">
+          <p class="admin-kicker">MERCHANT · 商家后台</p>
+          <h1 class="admin-title">经营<span class="admin-em">台账</span></h1>
+          <p class="admin-sub">商品上下架、库存调整、订单发货。发货会同时扣库存、加月销。</p>
+        </header>
+
+        <!-- 统计 -->
+        <section class="admin-section">
+          <h2 class="section-label">经营概览</h2>
+          <div class="stat-grid" id="statGrid"></div>
+        </section>
+
+        <!-- 商品 -->
+        <section class="admin-section">
+          <h2 class="section-label">商品管理</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">图</th>
+                  <th scope="col">商品</th>
+                  <th scope="col">分类</th>
+                  <th scope="col">价格</th>
+                  <th scope="col">库存</th>
+                  <th scope="col">月销</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody id="productRows">
+                <tr><td colspan="7" class="hint">加载中…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 订单 -->
+        <section class="admin-section">
+          <h2 class="section-label">订单处理</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">订单号</th>
+                  <th scope="col">买家</th>
+                  <th scope="col">商品</th>
+                  <th scope="col">金额</th>
+                  <th scope="col">状态</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody id="orderRows">
+                <tr><td colspan="6" class="hint">加载中…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/admin.js?v=1" defer></script>
+</body>
+</html>

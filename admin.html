@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 · 异世界商城</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/visual-spine.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="visual-spine admin-page" data-admin-page="admin">
+
+  <a class="skip-link" href="#adminMain">跳到后台内容</a>
+
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <img src="img/red.webp" alt="" class="logo" width="52" height="52">
+        <span class="brand-name">异世<span class="brand-accent">界</span></span>
+      </div>
+
+      <nav aria-label="主题切换">
+        <ul class="theme-tabs" role="tablist">
+          <li><button class="theme-tab" data-theme="red" type="button"><span class="swatch" style="background:#ff0000"></span><span class="label">炽热红</span></button></li>
+          <li><button class="theme-tab" data-theme="green" type="button"><span class="swatch" style="background:#00c800"></span><span class="label">森绿</span></button></li>
+          <li><button class="theme-tab" data-theme="blue" type="button"><span class="swatch" style="background:#0040ff"></span><span class="label">深空蓝</span></button></li>
+          <li><button class="theme-tab" data-theme="orange" type="button"><span class="swatch" style="background:#ff6f00"></span><span class="label">活力橙</span></button></li>
+          <li><button class="theme-tab active" data-theme="purple" type="button"><span class="swatch" style="background:#7A0080"></span><span class="label">紫晶</span></button></li>
+        </ul>
+      </nav>
+
+      <p class="who-am-i" id="whoAmI">校验身份中…</p>
+
+      <div class="auth-spine-links">
+        <a href="index.html" class="auth-back">← 商城</a>
+        <a href="merchant.html" class="auth-back">商家后台</a>
+      </div>
+    </header>
+
+    <main class="main-content" id="adminMain">
+      <section class="admin-shell">
+        <header class="admin-head">
+          <p class="admin-kicker">ADMIN · 管理后台</p>
+          <h1 class="admin-title">账号与<span class="admin-em">权限</span></h1>
+          <p class="admin-sub">
+            普通用户可以下单；商家可以管理商品与发货；管理员还管用户和角色。
+            角色改动立即生效，对方下次请求就会被拦或放行。
+          </p>
+        </header>
+
+        <section class="admin-section">
+          <h2 class="section-label">
+            用户列表
+            <input type="search" id="userSearch" class="search-input" placeholder="搜邮箱或用户名" maxlength="100">
+          </h2>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">用户</th>
+                  <th scope="col">角色</th>
+                  <th scope="col">注册</th>
+                  <th scope="col">最近登录</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody id="userRows">
+                <tr><td colspan="6" class="hint">加载中…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section">
+          <h2 class="section-label">权限说明</h2>
+          <dl class="role-matrix">
+            <div class="role-row">
+              <dt>普通用户</dt>
+              <dd>浏览商品、下单、声明已付款、查看自己的订单</dd>
+            </div>
+            <div class="role-row">
+              <dt>商家</dt>
+              <dd>以上全部，外加：商品上下架与库存调整、查看全部订单并点「发货」、经营统计</dd>
+            </div>
+            <div class="role-row">
+              <dt>管理员</dt>
+              <dd>以上全部，外加：用户列表、改角色、停用账号。管理员不能给自己降权。</dd>
+            </div>
+          </dl>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/admin.js?v=1" defer></script>
+</body>
+</html>

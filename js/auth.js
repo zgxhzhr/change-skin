@@ -284,6 +284,10 @@
     $('loginForm').addEventListener('submit', onSubmitLogin);
     $('registerForm').addEventListener('submit', onSubmitRegister);
 
+    // 关键：获取验证码按钮必须绑定，否则点了毫无反应
+    var sendBtn = $('sendCodeBtn');
+    if (sendBtn) sendBtn.addEventListener('click', onSendCode);
+
     var forgot = $('forgotLink');
     if (forgot) {
       forgot.addEventListener('click', function (e) {

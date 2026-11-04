@@ -121,7 +121,8 @@ def current_user(authorization: str | None = Header(None)) -> dict[str, Any]:
     row = db.fetch_one(
         """
         SELECT s.user_id, s.expires_at, s.revoked_at,
-               u.id, u.email, u.username, u.is_active
+               u.id, u.email, u.username, u.display_name, u.shop_name,
+               u.role, u.is_active
         FROM sessions s
         JOIN users u ON u.id = s.user_id
         WHERE s.token_hash = %s
@@ -240,6 +241,34 @@ def send_code(payload: SendCodeIn, request: Request):
     }
 
 
+
+
+# ---------------------------------------------------------------------------
+# 角色与权限
+#
+#   user      普通用户：浏览、下单、付款、看自己的订单
+#   merchant  商家：上架/编辑商品、查看并处理订单（发货）、看自己店铺统计
+#   admin     管理员：以上全部 + 用户管理与角色分配
+# ---------------------------------------------------------------------------
+ROLE_USER = "user"
+ROLE_MERCHANT = "merchant"
+ROLE_ADMIN = "admin"
+ALL_ROLES = (ROLE_USER, ROLE_MERCHANT, ROLE_ADMIN)
+
+
+def require_role(*allowed: str):
+    """依赖工厂：只放行指定角色，其余 403。"""
+    def _dep(user: dict = Depends(current_user)) -> dict:
+        if user.get("role") not in allowed:
+            raise HTTPException(403, "当前账号没有这个操作的权限")
+        return user
+    return _dep
+
+
+require_merchant = require_role(ROLE_MERCHANT, ROLE_ADMIN)
+require_admin = require_role(ROLE_ADMIN)
+
+
 # ---------------------------------------------------------------------------
 # 认证
 # ---------------------------------------------------------------------------
@@ -267,8 +296,8 @@ def register(payload: RegisterIn):
         raise HTTPException(409, "该邮箱或用户名已被注册")
 
     user_id = db.execute(
-        "INSERT INTO users (email, username, password_hash) VALUES (%s, %s, %s)",
-        (email, username, hash_password(payload.password)),
+        "INSERT INTO users (email, username, password_hash, role) VALUES (%s, %s, %s, %s)",
+        (email, username, hash_password(payload.password), ROLE_USER),
     )
     db.execute(
         "INSERT INTO user_preferences (user_id, theme, visual_style) VALUES (%s, %s, %s) "
@@ -283,7 +312,7 @@ def register(payload: RegisterIn):
     )
     return {
         "token": token,
-        "user": {"id": user_id, "email": email, "username": username},
+        "user": {"id": user_id, "email": email, "username": username, "role": ROLE_USER},
     }
 
 
@@ -292,7 +321,7 @@ def login(payload: LoginIn):
     account = payload.account.strip().lower()
 
     row = db.fetch_one(
-        "SELECT id, email, username, password_hash, is_active, failed_attempts, locked_until "
+        "SELECT id, email, username, password_hash, role, is_active, failed_attempts, locked_until "
         "FROM users WHERE email = %s OR username = %s LIMIT 1",
         (account, payload.account.strip()),
     )
@@ -335,7 +364,10 @@ def login(payload: LoginIn):
     )
     return {
         "token": token,
-        "user": {"id": row["id"], "email": row["email"], "username": row["username"]},
+        "user": {
+            "id": row["id"], "email": row["email"], "username": row["username"],
+            "role": row.get("role", ROLE_USER),
+        },
     }
 
 
@@ -358,7 +390,11 @@ def me(user: dict = Depends(current_user)):
         (user["id"],),
     )
     return {
-        "user": {"id": user["id"], "email": user["email"], "username": user["username"]},
+        "user": {
+            "id": user["id"], "email": user["email"], "username": user["username"],
+            "display_name": user.get("display_name"), "shop_name": user.get("shop_name"),
+            "role": user.get("role"),
+        },
         "preferences": pref or {"theme": "purple", "visual_style": "manga"},
     }
 
@@ -626,21 +662,19 @@ def pay_order(order_id: int, user: dict = Depends(current_user)):
 
 
 @app.post("/api/v1/orders/{order_id}/ship")
-def ship_order(order_id: int, payload: ShipIn, user: dict = Depends(current_user)):
+def ship_order(order_id: int, payload: ShipIn, user: dict = Depends(require_merchant)):
     """
     发货：paid → shipped，并在同一事务里
       products.stock         -= qty
       products.monthly_sales += qty
     库存扣减带 `WHERE stock >= qty` 做原子校验，避免并发超卖。
     """
-    order = db.fetch_one(
-        "SELECT id, status FROM orders WHERE id = %s AND user_id = %s",
-        (order_id, user["id"]),
-    )
+    order = db.fetch_one("SELECT id, status, user_id FROM orders WHERE id = %s", (order_id,))
     if not order:
         raise HTTPException(404, "订单不存在")
+    owner_id = order["user_id"]
     if order["status"] == "shipped":
-        return _load_order(order_id, user["id"])       # 幂等
+        return _load_order(order_id, owner_id)         # 幂等
     if order["status"] != "paid":
         raise HTTPException(409, "订单未付款，不能发货")
 
@@ -680,7 +714,7 @@ def ship_order(order_id: int, payload: ShipIn, user: dict = Depends(current_user
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(500, f"发货失败：{exc}") from exc
 
-    return _load_order(order_id, user["id"])
+    return _load_order(order_id, owner_id)
 
 
 # ---------------------------------------------------------------------------
@@ -688,6 +722,213 @@ def ship_order(order_id: int, payload: ShipIn, user: dict = Depends(current_user
 # 否则 "/" 的 StaticFiles 会吃掉 /api/v1/*
 # 这样只需启动后端一个进程，前端也一并可用。
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# 商家 / 管理员接口
+# ---------------------------------------------------------------------------
+class ProductIn(BaseModel):
+    name: str = Field(..., max_length=120)
+    slug: str = Field(..., max_length=80)
+    description: str = Field("", max_length=2000)
+    price_cents: int = Field(..., ge=0, le=100_000_000)
+    category: str = Field("other", max_length=40)
+    image: str = Field("", max_length=160)
+    badge: str = Field("", max_length=20)
+    stock: int = Field(0, ge=0, le=999_999)
+    is_active: bool = True
+
+
+class ProductPatch(BaseModel):
+    name: str | None = Field(None, max_length=120)
+    description: str | None = Field(None, max_length=2000)
+    price_cents: int | None = Field(None, ge=0, le=100_000_000)
+    category: str | None = Field(None, max_length=40)
+    image: str | None = Field(None, max_length=160)
+    badge: str | None = Field(None, max_length=20)
+    stock: int | None = Field(None, ge=0, le=999_999)
+    is_active: bool | None = None
+
+
+class RoleIn(BaseModel):
+    role: str = Field(..., max_length=20)
+
+
+# ---------- 商品管理（merchant / admin） ----------
+@app.get("/api/v1/merchant/products")
+def merchant_list_products(user: dict = Depends(require_merchant),
+                           limit: int = Query(100, ge=1, le=200),
+                           offset: int = Query(0, ge=0)):
+    rows = db.fetch_all(
+        "SELECT id, slug, name, description, price_cents, category, image, badge, "
+        "monthly_sales, rating, stock, is_active, sort_order "
+        "FROM products ORDER BY sort_order ASC, id ASC LIMIT %s OFFSET %s",
+        (limit, offset),
+    )
+    total = db.fetch_one("SELECT COUNT(*) AS n FROM products")
+    for r in rows:
+        r["price"] = round(r["price_cents"] / 100, 2)
+        r["rating"] = float(r["rating"])
+    return {"data": rows, "total": total["n"]}
+
+
+@app.post("/api/v1/merchant/products", status_code=201)
+def merchant_create_product(payload: ProductIn, user: dict = Depends(require_merchant)):
+    if db.fetch_one("SELECT id FROM products WHERE slug = %s", (payload.slug.strip(),)):
+        raise HTTPException(409, "该 slug 已存在")
+    pid = db.execute(
+        "INSERT INTO products (slug, name, description, price_cents, category, image, "
+        "badge, stock, is_active, sort_order) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        (payload.slug.strip(), payload.name.strip(), payload.description.strip(),
+         payload.price_cents, payload.category.strip() or "other", payload.image.strip(),
+         payload.badge.strip() or None, payload.stock, 1 if payload.is_active else 0, 999),
+    )
+    return db.fetch_one("SELECT * FROM products WHERE id = %s", (pid,))
+
+
+@app.patch("/api/v1/merchant/products/{product_id}")
+def merchant_patch_product(product_id: int, payload: ProductPatch,
+                           user: dict = Depends(require_merchant)):
+    row = db.fetch_one("SELECT id FROM products WHERE id = %s", (product_id,))
+    if not row:
+        raise HTTPException(404, "商品不存在")
+
+    sets, params = [], []
+    data = payload.dict(exclude_unset=True)
+    for field in ("name", "description", "price_cents", "category", "image", "stock"):
+        if field in data and data[field] is not None:
+            sets.append(f"{field} = %s")
+            params.append(data[field])
+    if "badge" in data:
+        sets.append("badge = %s")
+        params.append((data["badge"] or "").strip() or None)
+    if "is_active" in data and data["is_active"] is not None:
+        sets.append("is_active = %s")
+        params.append(1 if data["is_active"] else 0)
+
+    if not sets:
+        raise HTTPException(422, "没有要修改的字段")
+
+    params.append(product_id)
+    db.execute(f"UPDATE products SET {', '.join(sets)} WHERE id = %s", tuple(params))
+    return db.fetch_one("SELECT * FROM products WHERE id = %s", (product_id,))
+
+
+@app.delete("/api/v1/merchant/products/{product_id}", status_code=204)
+def merchant_delete_product(product_id: int, user: dict = Depends(require_merchant)):
+    row = db.fetch_one("SELECT id FROM products WHERE id = %s", (product_id,))
+    if not row:
+        raise HTTPException(404, "商品不存在")
+    # 不真删，下架（历史订单要能追溯到商品快照，删了会留下悬空引用）
+    db.execute("UPDATE products SET is_active = 0 WHERE id = %s", (product_id,))
+    return None
+
+
+# ---------- 订单管理（merchant / admin） ----------
+@app.get("/api/v1/merchant/orders")
+def merchant_list_orders(user: dict = Depends(require_merchant),
+                         status: str | None = Query(None, max_length=20),
+                         limit: int = Query(50, ge=1, le=200)):
+    where, params = [], []
+    if status:
+        where.append("o.status = %s")
+        params.append(status)
+    clause = ("WHERE " + " AND ".join(where)) if where else ""
+    rows = db.fetch_all(
+        f"SELECT o.id, o.order_no, o.user_id, u.username, u.email, o.total_cents, "
+        f"o.status, o.addr, o.phone, o.paid_at, o.shipped_at, o.created_at "
+        f"FROM orders o JOIN users u ON u.id = o.user_id {clause} "
+        f"ORDER BY o.id DESC LIMIT %s",
+        tuple(params) + (limit,),
+    )
+    for r in rows:
+        r["total"] = round(r["total_cents"] / 100, 2)
+        r["items"] = db.fetch_all(
+            "SELECT product_id, name_snapshot, qty, price_cents FROM order_items WHERE order_id = %s",
+            (r["id"],),
+        )
+    return {"data": rows}
+
+
+# ---------- 统计（merchant / admin） ----------
+@app.get("/api/v1/merchant/stats")
+def merchant_stats(user: dict = Depends(require_merchant)):
+    totals = db.fetch_one(
+        "SELECT COUNT(*) AS products, "
+        "COALESCE(SUM(stock), 0) AS stock_total, "
+        "COALESCE(SUM(monthly_sales), 0) AS sales_total "
+        "FROM products WHERE is_active = 1"
+    )
+    order_stat = db.fetch_one(
+        "SELECT COUNT(*) AS orders, "
+        "COALESCE(SUM(total_cents), 0) AS revenue_cents, "
+        "SUM(status = 'pending') AS pending_n, "
+        "SUM(status = 'paid') AS paid_n, "
+        "SUM(status = 'shipped') AS shipped_n "
+        "FROM orders"
+    )
+    return {
+        "products": totals["products"],
+        "stock_total": int(totals["stock_total"]),
+        "monthly_sales_total": int(totals["sales_total"]),
+        "orders": order_stat["orders"],
+        "revenue": round(int(order_stat["revenue_cents"] or 0) / 100, 2),
+        "pending": int(order_stat["pending_n"] or 0),
+        "paid": int(order_stat["paid_n"] or 0),
+        "shipped": int(order_stat["shipped_n"] or 0),
+    }
+
+
+# ---------- 用户管理（仅 admin） ----------
+@app.get("/api/v1/admin/users")
+def admin_list_users(user: dict = Depends(require_admin),
+                     q: str | None = Query(None, max_length=100),
+                     limit: int = Query(50, ge=1, le=200)):
+    if q:
+        rows = db.fetch_all(
+            "SELECT id, email, username, display_name, shop_name, role, is_active, "
+            "last_login_at, created_at FROM users "
+            "WHERE email LIKE %s OR username LIKE %s ORDER BY id DESC LIMIT %s",
+            (f"%{q}%", f"%{q}%", limit),
+        )
+    else:
+        rows = db.fetch_all(
+            "SELECT id, email, username, display_name, shop_name, role, is_active, "
+            "last_login_at, created_at FROM users ORDER BY id DESC LIMIT %s",
+            (limit,),
+        )
+    return {"data": rows}
+
+
+@app.put("/api/v1/admin/users/{user_id}/role")
+def admin_set_role(user_id: int, payload: RoleIn, user: dict = Depends(require_admin)):
+    role = payload.role.strip()
+    if role not in ALL_ROLES:
+        raise HTTPException(422, "未知角色")
+    target = db.fetch_one("SELECT id, role FROM users WHERE id = %s", (user_id,))
+    if not target:
+        raise HTTPException(404, "用户不存在")
+    if target["id"] == user["id"] and role != ROLE_ADMIN:
+        raise HTTPException(409, "不能给自己降权，请让另一个管理员操作")
+    db.execute("UPDATE users SET role = %s WHERE id = %s", (role, user_id))
+    return {"id": user_id, "role": role}
+
+
+@app.put("/api/v1/admin/users/{user_id}/active")
+def admin_set_active(user_id: int, user: dict = Depends(require_admin)):
+    target = db.fetch_one("SELECT id, is_active FROM users WHERE id = %s", (user_id,))
+    if not target:
+        raise HTTPException(404, "用户不存在")
+    if target["id"] == user["id"]:
+        raise HTTPException(409, "不能停用自己的账号")
+    new_state = 0 if target["is_active"] else 1
+    db.execute("UPDATE users SET is_active = %s WHERE id = %s", (new_state, user_id))
+    return {"id": user_id, "is_active": bool(new_state)}
+
+
+# ---------------------------------------------------------------------------
+# 前端托管：必须放在所有 API 路由之后挂载，
+# 否则 "/" 的 StaticFiles 会吃掉 /api/v1/*
+# ---------------------------------------------------------------------------
+
 FRONTEND_DIR = Path(__file__).resolve().parent.parent
 
 if (FRONTEND_DIR / "index.html").exists():
