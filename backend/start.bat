@@ -1,25 +1,29 @@
 @echo off
+REM ==========================================================================
+REM  Change-skin backend launcher
+REM
+REM  This file is intentionally ASCII-only.
+REM  cmd.exe parses .bat files using the system code page (GBK on zh-CN),
+REM  NOT the code page set by chcp inside the file. Chinese text saved as
+REM  UTF-8 therefore gets split into garbage "commands". All human-facing
+REM  Chinese output lives in run.py, which forces UTF-8 on its own streams.
+REM ==========================================================================
+
 chcp 65001 >nul
-title 异世界商城 · 后端
-
+title change-skin backend
 cd /d "%~dp0"
-
-echo ============================================
-echo   正在启动异世界商城后端
-echo ============================================
-echo.
 
 set PYTHONIOENCODING=utf-8
 
 where python >nul 2>nul
 if errorlevel 1 (
-    echo [X] 找不到 python，请先安装 Python 3.10+ 并加入 PATH
+    echo [X] Python not found. Install Python 3.10+ and add it to PATH.
     pause
     exit /b 1
 )
 
-python run.py %*
+python -u run.py %*
 
 echo.
-echo 服务已停止。
+echo Server stopped.
 pause
