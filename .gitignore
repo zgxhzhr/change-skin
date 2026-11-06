@@ -16,3 +16,6 @@ backend/__pycache__/
 _t.html
 _devlogin.html
 
+backend/_bat.out
+backend/_bat.err
+
