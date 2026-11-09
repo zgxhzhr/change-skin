@@ -78,6 +78,11 @@
   // 结算弹窗
   // -------------------------------------------------------------------------
   function openCheckout(product) {
+    // 没有商品上下文时不要打开空结算窗（否则显示「请选择商品 / ¥0」）
+    if (!product || !product.id) {
+      alert('请先在商品列表里点选要购买的商品');
+      return;
+    }
     if (!readToken()) {
       location.href = 'login.html?next=checkout';
       return;

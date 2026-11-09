@@ -330,7 +330,20 @@ class ModalsInit {
             this.contactModal.show();
         });
         document.getElementById('heroBuyBtn')?.addEventListener('click', () => {
-            this.checkoutModal.show();
+            // 主视觉按钮没有商品上下文：滚到商品区让用户挑，
+            // 而不是打开一个「请选择商品 / ¥0」的空结算窗。
+            const target = document.querySelector('.content-panels') ||
+                           document.querySelector('.product-list');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const bar = document.querySelector('.filter-bar');
+                if (bar) {
+                    bar.classList.add('is-hint');
+                    setTimeout(() => bar.classList.remove('is-hint'), 1800);
+                }
+            } else {
+                this.checkoutModal.show();
+            }
         });
         document.getElementById('carouselList')?.addEventListener('click', (e) => {
             const img = e.target.closest('img');

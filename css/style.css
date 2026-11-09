@@ -1520,3 +1520,15 @@ body.visual-editorial :focus-visible {
 .user-area {
     margin-left: auto;
 }
+
+
+/* hero「立即抢购」点击后，商品区筛选栏短暂高亮，提示用户在这里选商品 */
+.filter-bar.is-hint {
+    animation: hintPulse 1.8s ease;
+}
+
+@keyframes hintPulse {
+    0%, 100% { box-shadow: none; }
+    20% { box-shadow: 0 0 0 3px var(--theme-color, #7A0080); }
+    60% { box-shadow: 0 0 0 3px var(--theme-color, #7A0080); }
+}
