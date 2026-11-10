@@ -362,7 +362,12 @@ class ModalsInit {
  */
 class AuthUI {
     constructor() {
-        this.apiBase = (window.CS_API_BASE || 'http://127.0.0.1:8000') + '/api/v1';
+        // 不能写死 127.0.0.1：对外（Radmin 虚拟 IP / 域名）访问时，
+        // 那会变成请求访问者自己的电脑，导致 /auth/me 失败、登录态被清掉。
+        var isLocalStatic = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname) &&
+            location.port !== '' && location.port !== '80' &&
+            location.port !== '443' && location.port !== '8000';
+        this.apiBase = (window.CS_API_BASE || (isLocalStatic ? 'http://127.0.0.1:8000' : '')) + '/api/v1';
         this.area = document.getElementById('userArea');
         this.entry = document.getElementById('userEntry');
         this.token = this.readToken();

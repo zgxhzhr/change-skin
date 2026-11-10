@@ -10,8 +10,13 @@
 (function () {
   'use strict';
 
-  var API_ORIGIN = window.CS_API_BASE ||
-    (location.port === '8000' ? '' : 'http://127.0.0.1:8000');
+  // API 地址：后端托管前端时一律同源相对路径（本机 8000 / Radmin 虚拟 IP / 任何域名）。
+// 只有从本机其它端口的独立静态服务器（如 8777）打开时，才回退到 127.0.0.1:8000。
+// 不能写死 127.0.0.1 —— 对外访问时会变成请求访问者自己的电脑，导致登录态立即失效。
+var IS_LOCAL_STATIC = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname) &&
+  location.port !== '' && location.port !== '80' &&
+  location.port !== '443' && location.port !== '8000';
+var API_ORIGIN = window.CS_API_BASE || (IS_LOCAL_STATIC ? 'http://127.0.0.1:8000' : '');
   var API = API_ORIGIN + '/api/v1';
   var TOKEN_KEY = 'cs_token';
 
