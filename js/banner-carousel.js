@@ -125,6 +125,13 @@ class BannerCarousel {
     goTo(index, animate = true) {
         if (!this.track) return;
 
+        // 索引钳制。track 结构：[克隆尾图, 1..total, 克隆首图]
+        // 合法索引只有 0..total+1。越界时 translateX 会把所有 slide
+        // 推出视口 —— 表现就是「连点几次下一张，图全白了」。
+        if (!Number.isFinite(index)) index = 1;
+        if (index < 0) index = 0;
+        if (index > this.total + 1) index = this.total + 1;
+
         this.index = index;
         this.track.style.transition = animate ? '' : 'none';
         this.track.style.transform = `translateX(-${this.index * 100}%)`;
@@ -146,11 +153,22 @@ class BannerCarousel {
     }
 
     next() {
+        // 已经在克隆首图：先无动画跳回真实首图，再前进。
+        // 连点时 transitionend 可能被新的 transition 打断而不触发，
+        // 只依赖 onTransitionEnd 复位会漏掉，这里主动兜住。
+        if (this.index >= this.total + 1) {
+            this.goTo(1, false);
+            void this.track.offsetWidth;
+        }
         this.goTo(this.index + 1);
         this.restart();
     }
 
     prev() {
+        if (this.index <= 0) {
+            this.goTo(this.total, false);
+            void this.track.offsetWidth;
+        }
         this.goTo(this.index - 1);
         this.restart();
     }
@@ -158,7 +176,14 @@ class BannerCarousel {
     play() {
         this.pause();
         if (document.hidden) return;
-        this.timer = setInterval(() => this.goTo(this.index + 1), this.delay);
+        this.timer = setInterval(() => {
+            // 自动播放同样要兜边界：切到后台标签页时 transitionend 不触发，
+            // index 会一直累加，回来后就是一片空白。
+            if (this.index >= this.total + 1) {
+                this.goTo(1, false);
+            }
+            this.goTo(this.index + 1);
+        }, this.delay);
     }
 
     pause() {
