@@ -1,3 +1,29 @@
+
+/**
+ * 图片加载失败兜底
+ * 弱网（Radmin 虚拟局域网 / 移动网络）下图片偶发拉取失败，
+ * <img> 会留一块空白。这里统一给失败态打标记，由 CSS 渲染占位。
+ * 用 capture 阶段监听，img 的 error 事件不冒泡。
+ */
+(function () {
+    if (window.__csImgFallbackInstalled) return;
+    window.__csImgFallbackInstalled = true;
+
+    document.addEventListener('error', function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== 'IMG') return;
+        if (el.dataset.retried === '1') {
+            el.classList.add('img-failed');
+            return;
+        }
+        // 先自动重试一次（网络抖动常常第二次就成功）
+        el.dataset.retried = '1';
+        var src = el.src;
+        el.src = '';
+        setTimeout(function () { el.src = src; }, 600);
+    }, true);
+})();
+
 class ThemeSwitcher {
     constructor() {
         this.logo = document.querySelector('.logo');

@@ -1532,3 +1532,20 @@ body.visual-editorial :focus-visible {
     20% { box-shadow: 0 0 0 3px var(--theme-color, #7A0080); }
     60% { box-shadow: 0 0 0 3px var(--theme-color, #7A0080); }
 }
+
+
+/* ==========================================================================
+   图片加载失败兜底
+   穿透/弱网下偶尔有图拉不下来，<img> 失败会留一块纯白，比没图更难看。
+   给失败态一个纸色底 + 极淡的对角纹，视觉上像"待装裱的相框"。
+   ========================================================================== */
+img.img-failed {
+    background-color: #eae3d8;
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(120, 110, 95, .06) 0 6px,
+        transparent 6px 12px
+    );
+    opacity: .75;
+    object-fit: contain;
+}
