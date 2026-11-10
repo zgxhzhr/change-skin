@@ -376,7 +376,7 @@ body.visual-spine .banner-arrow {
     transition: background .25s ease, border-color .25s ease;
 }
 
-body.visual-spine .banner-arrow:hover { background: rgba(255, 255, 255, .14); transform: none; }
+body.visual-spine .banner-arrow:hover { background: rgba(255, 255, 255, .14); transform: translateY(-50%); }  /* 必须保留垂直居中，否则 hover 时会跳到 top:50% */
 
 body.visual-spine .banner-dots button {
     width: 22px;
@@ -1449,8 +1449,9 @@ body.visual-spine .theme-tab.active .swatch {
 
 /* 11) banner 主标签与 CTA 已用主题色，这里让箭头 hover 也响应 */
 body.visual-spine .banner-arrow:hover {
-    background: var(--sp-accent);
+    background: color-mix(in srgb, var(--sp-accent) 26%, rgba(18, 16, 14, .5));
     border-color: var(--sp-accent);
+    color: #fff;
 }
 
 /* 12) 弹窗确认按钮 */

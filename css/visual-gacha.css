@@ -298,7 +298,7 @@ body.visual-gacha .banner-arrow {
 }
 
 body.visual-gacha .banner-arrow:hover {
-    transform: scale(1.1);
+    transform: translateY(-50%) scale(1.1);
     border-color: var(--ga-candy);
 }
 
